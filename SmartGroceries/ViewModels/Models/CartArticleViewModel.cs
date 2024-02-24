@@ -216,7 +216,6 @@ namespace SmartGroceries.ViewModels
         public CartArticleViewModel(Models.CartArticle cartArticle, ViewModels.ViewModelBase viewModelContainer)
         {
             Shop = cartArticle.Cart.Shop;
-            IsNew = false;
             if (Shop.ShopArticles.TryGetValue(cartArticle.Article.Id, out var shopArticle))
             {
                 IsUnitFixed = shopArticle.IsUnitFixed;
