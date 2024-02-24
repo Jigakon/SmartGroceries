@@ -7,120 +7,116 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SmartGroceries.ViewModels
 {
-    public class ArticleViewModel : ViewModelBase
+    public class ArticleViewModel : ViewModelData
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Brand { get; set; }
-        public ObservableCollection<TagViewModel> Tags { get; set; }
-        public ViewModels.ViewModelBase ViewModelContainer { get; set; }
+
+        private string _name;
+        public string Name { get => _name; set { _name = value; OnPropertyChanged(nameof(Name)); } }
+        private string _brand;
+        public string Brand { get => _brand; set { _brand = value; OnPropertyChanged(nameof(Brand)); } }
+
+        private TagViewModel _tag;
+        public TagViewModel Tag 
+        { 
+            get => _tag; 
+            set 
+            { 
+                _tag = value; OnPropertyChanged(nameof(Tag)); 
+                OnPropertyChanged(nameof(TagColor));
+                OnPropertyChanged(nameof(TagTextColor));
+                OnPropertyChanged(nameof(TagText)); 
+            } 
+        }
+
+        public string TagColor { get => Tag?.Color ?? "#FFFFFF"; }
+        public string TagTextColor { get => Tag == null ? "#F0F0F0" : "#101010"; }
+        public string TagText { get => Tag?.Name ?? "No Tag"; }
+
+        #region Commands
         public ICommand DeleteFromArticleManageCommand { get; }
         public ICommand MakeTagCommand { get; }
-        public ArticleViewModel(Models.Article article)
-        {
-            Id = article.Id; Name = article.Name; Brand = article.Brand;
-            Tags = new ObservableCollection<TagViewModel>();
-            foreach (var item in article.Tags)
-            {
-                var tagViewModel = new TagViewModel(item);
-                tagViewModel.ViewModelContainer = this;
-                Tags.Add(tagViewModel);
-            }
+        #endregion
 
+        public ArticleViewModel(Models.Article article, ViewModels.ViewModelBase viewModelContainer)
+        {
+            Id = article.Id; 
+            Name = article.Name; 
+            Brand = article.Brand;
+            Tag = new TagViewModel(article.Tag);
+            ViewModelContainer = viewModelContainer;
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
         }
 
-        public ArticleViewModel(Guid id, string name = "New Article", string brand = "New Article", List<Tag> tags = null)
+        public ArticleViewModel(Guid id, string name = "New Article", string brand = "New Article", Tag tag = null)
         {
-            Tags = new ObservableCollection<TagViewModel>();
-            Article article = GlobalDatabase.GetArticle(id);
-            if (article != null)
+            Article article = GlobalDatabase.TryGetArticle(id);
+            if (article == null)
             {
-                Id = id; Name = name; Brand = brand;
-                if (tags != null)
-                    foreach (var item in tags)
-                    {
-                        var tagViewModel = new TagViewModel(item);
-                        tagViewModel.ViewModelContainer = this;
-                        Tags.Add(tagViewModel);
-                    }
+                Id = id; 
+                Name = name; 
+                Brand = brand;
+                Tag = new TagViewModel(tag);
             }
             else
             {
-                Id = article.Id; Name = article.Name; Brand = article.Brand;
-                if (article.Tags != null)
-                    foreach (var item in article.Tags)
-                    { 
-                        var tagViewModel = new TagViewModel(item);
-                        tagViewModel.ViewModelContainer = this;
-                        Tags.Add(tagViewModel);
-                    }
+                Id = article.Id; 
+                Name = article.Name; 
+                Brand = article.Brand; 
+                Tag = new TagViewModel(article.Tag);
             }
+            Tag.ViewModelContainer = this;
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
         }
 
-        public ArticleViewModel(string name = "New Article", string brand = "New Brand", List<Tag> tags = null)
+        public ArticleViewModel(string name = "New Article", string brand = "New Brand", Tag tag = null)
         {
             Id = Guid.NewGuid(); Name = name; Brand = brand;
-            Tags = new ObservableCollection<TagViewModel>();
-            if (tags != null)
-                foreach (var item in tags)
-                {
-                    var tagViewModel = new TagViewModel(item);
-                    tagViewModel.ViewModelContainer = this;
-                    Tags.Add(tagViewModel);
-                }
+            Tag =  new TagViewModel(tag);
 
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
         }
 
-        public void AddTag(TagViewModel tagViewModel)
+        public void SetTag(TagViewModel tagViewModel)
         {
-            if (Tags.FirstOrDefault(x => x.Id == tagViewModel.Id) != null)
-                return;
-            Tags.Add(tagViewModel);
-            OnPropertyChanged(nameof(Tags));
+            Tag = tagViewModel;
+            OnPropertyChanged(nameof(Tag));
         }
 
-        public void RemoveTag(TagViewModel tagViewModel)
-        {
-            Tags.Remove(tagViewModel);
-            OnPropertyChanged(nameof(Tags));
-        }
+        public Article MakeArticle() => new Article(Id, Name, Brand, Tag.MakeTag());
 
-        public void Save(bool Override = true)
+        public void Save()
         {
-            Article article = GlobalDatabase.GetArticle(Id);
-            if (article == null)
+            Article article = GlobalDatabase.TryGetArticle(Id);
+            bool articleExists = article != null;
+            if (!articleExists)
+                article = MakeArticle();
+            else
             {
-                List<Tag> tags = new List<Tag>();
-                foreach (var item in Tags)
-                {
-                    item.Save(Override);
-                    tags.Add(item.MakeTag());
-                }
-                GlobalDatabase.TryAddArticle(new Article(Id, Name, Brand, tags));
+                if (Name != article.Name && MessageBox.Show($"The Name of the article changed !\nModify {article.Name} by {Name} ?", "Name Changed !", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    article.Name = Name;
+                else
+                    Name = article.Name;
+
+                if (Brand != article.Brand && MessageBox.Show($"The Brand of the article changed !\nModify {article.Brand} by {Brand} ?", "Brand Changed !", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    article.Brand = Brand;
+                else
+                    Brand = article.Brand;
+
+                if (Tag != null && Tag.Id != (article.Tag?.Id ?? Guid.Empty))
+                    article.Tag = Tag.MakeTag();
             }
-            else if (Override)
-            {
-                article.Id = Id;
-                article.Name = Name;
-                article.Brand = Brand;
-                List<Tag> tags = new List<Tag>();
-                foreach (var item in Tags)
-                {
-                    item.Save(Override);
-                    tags.Add(item.MakeTag());
-                }
-                article.Tags = tags;
-            }
+
+            Tag.Save();
+            GlobalDatabase.ModifyOrAddArticle(article);
         }
     }
 }

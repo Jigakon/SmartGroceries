@@ -13,7 +13,7 @@ namespace SmartGroceries.Models
         public string Name { get; set; }
         public string Group { get; set; }
         public string Location { get; set; }
-        public List<ShopArticle> ShopArticles { get; set; }
+        public Dictionary<Guid, ShopArticle> ShopArticles { get; set; }
 
         public Shop(Guid id, string name, string group, string location, List<ShopArticle> shopArticles = null)
         {
@@ -21,7 +21,10 @@ namespace SmartGroceries.Models
             Name = name;
             Group = group;
             Location = location;
-            ShopArticles = shopArticles ?? new List<ShopArticle>();
+            ShopArticles = new Dictionary<Guid, ShopArticle>();
+            if (shopArticles != null)
+            foreach(ShopArticle shopArticle in shopArticles)
+                ShopArticles.Add(shopArticle.Article.Id, shopArticle);
         }
 
         public Shop(string name = "Shop Name", string group = "Shop Group", string location = "Random Address", List<ShopArticle> shopArticles = null)
@@ -30,7 +33,10 @@ namespace SmartGroceries.Models
             Name = name;
             Group = group;
             Location = location;
-            ShopArticles = shopArticles ?? new List<ShopArticle>();
+            ShopArticles = new Dictionary<Guid, ShopArticle>();
+            if (shopArticles != null)
+                foreach (ShopArticle shopArticle in shopArticles)
+                    ShopArticles.Add(shopArticle.Article.Id, shopArticle);
         }
 
         public void TryAddArticle(ShopArticle article)
@@ -40,22 +46,22 @@ namespace SmartGroceries.Models
                 if (GetShopArticle(article.Article.Id) == null)
                 {
                     article.Shop = this;
-                    ShopArticles.Add(article);
+                    ShopArticles.Add(article.Article.Id, article);
                 }
             }
             else
                 MessageBox.Show("An article registered in shop is doesn't exists in Article Database");
         }
 
-        public void TryAddArticle(Article article, Unit unit = Unit.Weight, float unitQuantity = -1f, List<ArticleInfo> infos = null)
+        public void TryAddArticle(Article article, Unit unit = Unit.Weight, float unitQuantity = -1f, List<ArticleInfo> infos = null, bool isUnitFixed = false)
         {
             if (GetShopArticle(article.Id) == null)
-                ShopArticles.Add(new ShopArticle(this, article, infos, unit, unitQuantity));
+                ShopArticles.Add(article.Id, new ShopArticle(this, article, infos, unit, unitQuantity, isUnitFixed));
         }
 
         public ShopArticle GetShopArticle(Guid articleID)
         {
-            return ShopArticles.FirstOrDefault(x => x.Article.Id == articleID);
+            return ShopArticles.FirstOrDefault(x => x.Value.Article.Id == articleID).Value;
         }
 
         public ArticleInfo GetArticleInfo(Guid articleID, DateTime date)
@@ -67,6 +73,13 @@ namespace SmartGroceries.Models
         {
             var shopArticle = GetShopArticle(id);
             shopArticle.AddArticleInfo(articleInfo);
+        }
+
+        internal void RemoveArticle(Guid articleID)
+        {
+            ShopArticle shopArticle = ShopArticles.FirstOrDefault(x => x.Value.Article.Id == articleID).Value;
+            if (shopArticle != null)
+                ShopArticles.Remove(shopArticle.Article.Id);
         }
     }
 }

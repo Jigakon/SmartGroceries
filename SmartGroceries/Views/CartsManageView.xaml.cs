@@ -23,9 +23,12 @@ namespace SmartGroceries.Views
         public CartsManageView()
         {
             InitializeComponent();
+
+            IsCompactDisplay.IsChecked = (Application.Current as App).preferences.GlobalCompactMode;
+            ChangeDisplayMode();
         }
 
-        private void IsCompactDisplay_Checked(object sender, RoutedEventArgs e)
+        private void ChangeDisplayMode()
         {
             string key = "CartTemplate";
             if (IsCompactDisplay.IsChecked == true)
@@ -34,6 +37,11 @@ namespace SmartGroceries.Views
             var template = TryFindResource(key);
             if (template != null)
                 lbCarts.ItemTemplate = template as DataTemplate;
+        }
+
+        private void IsCompactDisplay_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeDisplayMode();
         }
     }
 }

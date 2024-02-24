@@ -7,60 +7,79 @@
         xmlns:views="clr-namespace:SmartGroceries.Views"
         xmlns:vms="clr-namespace:SmartGroceries.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type vms:ArticlesManageViewModel}">
-                <views:ArticlesManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:TagsManageViewModel}">
-                <views:TagsManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:ShopsManageViewModel}">
-                <views:ShopsManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:ShopManageViewModel}">
-                <views:ShopManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:ArticleInfosManageViewModel}">
-                <views:ArticleInfosManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:CartsManageViewModel}">
-                <views:CartsManageView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:CartManageViewModel}">
-                <views:CartManageView/>
-            </DataTemplate>
-        </Grid.Resources>
+        Title="MainWindow" Height="450" Width="800" MinWidth="600" MinHeight="450">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Change Paths" Click="ChangePaths_Button"/>
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
+        <Grid Background="#1f1f1f">
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type vms:ArticlesManageViewModel}">
+                    <views:ArticlesManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:TagsManageViewModel}">
+                    <views:TagsManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:ShopsManageViewModel}">
+                    <views:ShopsManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:ShopArticlesManageViewModel}">
+                    <views:ShopManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:ArticleInfosManageViewModel}">
+                    <views:ArticleInfosManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:CartsManageViewModel}">
+                    <views:CartsManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:CartArticlesManageViewModel}">
+                    <views:CartManageView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:CompareShopArticleViewModel}">
+                    <views:CompareShopArticlesView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vms:CartInfomationsViewModel}">
+                    <views:CartInformationsView/>
+                </DataTemplate>
+            </Grid.Resources>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*" MinWidth="100" MaxWidth="300"></ColumnDefinition>
-            <ColumnDefinition Width="80*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*" MinWidth="100" MaxWidth="300"></ColumnDefinition>
+                <ColumnDefinition Width="80*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <Border Background="#10101B">
-            <StackPanel Grid.Column="0" Margin="10">
-                <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20" Height="35" 
+            <Border Background="#10101B">
+                <StackPanel Grid.Column="0" Margin="10">
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Carts"
                     Command="{Binding GoToManageCartsCommand}"></Button>
-                <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20" Height="35" 
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Tags"
                     Command="{Binding GoToManageTagsCommand}"></Button>
-                <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20" Height="35" 
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Articles"
                     Command="{Binding GoToManageArticlesCommand}"></Button>
-                <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20" Height="35" 
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10 0 20" Height="35" 
                     Content="Shops"
                     Command="{Binding GoToManageShopsCommand}"></Button>
-            </StackPanel>
-        </Border>
-
-        <ContentControl 
+                    <Separator/>
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20 0 10" Height="35" 
+                    Content="Compare"
+                    Command="{Binding GoToCompareCommand}"></Button>
+                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
+                    Content="Carts Infos"
+                    Command="{Binding GoToCartsInformationCommand}"></Button>
+                </StackPanel>
+            </Border>
+            <ContentControl 
             Content="{Binding CurrentViewModel}"
             x:Name="CurrentView"
             Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
             Margin="0,20,0,0"/>
-    </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

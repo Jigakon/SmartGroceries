@@ -1,0 +1,64 @@
+﻿<Window x:Class="SmartGroceries.Windows.ChangePathsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartGroceries.Windows"
+        mc:Ignorable="d"
+        Title="Change Paths Window" Height="400" Width="500" ResizeMode="NoResize">
+    <DockPanel Margin="20">
+        <TextBlock DockPanel.Dock="Top" Text="Change Resource Paths" FontSize="30" FontWeight="DemiBold"></TextBlock>
+
+        <StackPanel DockPanel.Dock="Top" Margin="0 20 0 10" VerticalAlignment="Stretch">
+            <TextBlock Text="Tags Paths"></TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TagsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="TagOpenDialog_Click"></Button>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
+            <TextBlock Text="Articles Paths"></TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="ArticlesPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="ArticleOpenDialog_Click"></Button>
+            </Grid>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
+            <TextBlock Text="Shops Paths"></TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="ShopsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
+                <Button Grid.Column="1" Content="Search" Margin="5,0,0,0" Padding="10 0" Height="18" VerticalAlignment="Top" Click="ShopOpenDialog_Click"></Button>
+            </Grid>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
+            <TextBlock Text="Shops Paths"></TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="CartsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="CartOpenDialog_Click"></Button>
+            </Grid>
+        </StackPanel>
+
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Content="Apply" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Apply_Click"></Button>
+            <Button Content="Cancel" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Cancel_Click"></Button>
+        </StackPanel>
+    </DockPanel>
+</Window>

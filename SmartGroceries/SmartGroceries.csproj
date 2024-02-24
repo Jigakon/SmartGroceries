@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -56,8 +62,8 @@
     <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Json, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.8.0.1\lib\net462\System.Text.Json.dll</HintPath>
+    <Reference Include="System.Text.Json, Version=8.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.8.0.2\lib\net462\System.Text.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -98,16 +104,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\MakeArticleInfoCommand.cs" />
-    <Compile Include="Commands\MakeCartArticleCommand.cs" />
-    <Compile Include="Commands\MakeCartCommand.cs" />
-    <Compile Include="Commands\MakeShopArticleCommand.cs" />
-    <Compile Include="Commands\MakeShopCommand.cs" />
-    <Compile Include="Commands\RemoveArticleInfoCommand.cs" />
-    <Compile Include="Commands\SaveArticleInfosCommand.cs" />
-    <Compile Include="Commands\SaveCartsCommand.cs" />
-    <Compile Include="Commands\SaveShopsCommand.cs" />
+    <Compile Include="ApplicationPreferences.cs" />
+    <Compile Include="Commands\Make\EditTagCommand.cs" />
+    <Compile Include="Commands\Make\MakeArticleInfoCommand.cs" />
+    <Compile Include="Commands\Make\MakeCartArticleCommand.cs" />
+    <Compile Include="Commands\Make\MakeCartCommand.cs" />
+    <Compile Include="Commands\Make\MakeShopArticleCommand.cs" />
+    <Compile Include="Commands\Make\MakeShopCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveArticleInfoCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveCartArticleCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveCartCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveShopArticleCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveShopCommand.cs" />
+    <Compile Include="Commands\SaveManageCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Misc\EnumBindingSourceExtension.cs" />
     <Compile Include="Models\ArticleInfo.cs" />
     <Compile Include="Models\Cart.cs" />
@@ -119,10 +130,17 @@
     <Compile Include="Models\ShopArticleDTO.cs" />
     <Compile Include="Models\ShopDTO.cs" />
     <Compile Include="Models\Unit.cs" />
+    <Compile Include="Properties\Resources.fr-FR.Designer.cs">
+      <DependentUpon>Resources.fr-FR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ViewModels\CartInfomationsViewModel.cs" />
+    <Compile Include="ViewModels\CompareShopArticleViewModel.cs" />
     <Compile Include="ViewModels\Managers\ArticleInfosManageViewModel.cs" />
-    <Compile Include="ViewModels\Managers\CartManageViewModel.cs" />
+    <Compile Include="ViewModels\Managers\CartArticlesManageViewModel.cs" />
     <Compile Include="ViewModels\Managers\CartsManageViewModel.cs" />
-    <Compile Include="ViewModels\Managers\ShopManageViewModel.cs" />
+    <Compile Include="ViewModels\Managers\ShopArticlesManageViewModel.cs" />
     <Compile Include="ViewModels\Managers\ShopsManageViewModel.cs" />
     <Compile Include="ViewModels\Models\ArticleInfoViewModel.cs" />
     <Compile Include="ViewModels\Models\CartArticleViewModel.cs" />
@@ -144,21 +162,34 @@
     <Compile Include="Views\ShopsManageView.xaml.cs">
       <DependentUpon>ShopsManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tools\CartInformationsView.xaml.cs">
+      <DependentUpon>CartInformationsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tools\CompareShopArticlesView.xaml.cs">
+      <DependentUpon>CompareShopArticlesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChangePathsWindow.xaml.cs">
+      <DependentUpon>ChangePathsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditTagWindow.xaml.cs">
+      <DependentUpon>EditTagWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MakeShopArticleWindow.xaml.cs">
       <DependentUpon>MakeShopArticleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MakeShopWindow.xaml.cs">
+      <DependentUpon>MakeShopWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MakeTagWindow.xaml.cs">
       <DependentUpon>MakeTagWindow.xaml</DependentUpon>
     </Compile>
     <None Include="articles.json" />
     <Compile Include="Commands\CommandBase.cs" />
-    <Compile Include="Commands\MakeArticleCommand.cs" />
-    <Compile Include="Commands\MakeTagCommand.cs" />
+    <Compile Include="Commands\Make\MakeArticleCommand.cs" />
+    <Compile Include="Commands\Make\MakeTagCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="Commands\RemoveArticleCommand.cs" />
-    <Compile Include="Commands\RemoveTagCommand.cs" />
-    <Compile Include="Commands\SaveArticlesCommand.cs" />
-    <Compile Include="Commands\SaveTagsCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveArticleCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveTagCommand.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Models\ArticleDTO.cs" />
     <Compile Include="Models\GlobalDatabase.cs" />
@@ -178,8 +209,13 @@
       <DependentUpon>TagsManageView.xaml</DependentUpon>
     </Compile>
     <None Include="carts.json" />
+    <None Include="preferences.json" />
     <None Include="shops.json" />
     <None Include="tags.json" />
+    <Page Include="ColorResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -220,7 +256,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tools\CartInformationsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tools\CompareShopArticlesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangePathsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditTagWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MakeShopArticleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MakeShopWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,8 +299,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.fr-FR.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.fr-FR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />

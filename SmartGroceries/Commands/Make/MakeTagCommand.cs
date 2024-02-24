@@ -19,18 +19,7 @@ namespace SmartGroceries.Commands
 
         public override void Execute(object parameter)
         {
-            switch (_containerViewModel)
-            {
-                case TagsManageViewModel tagManageViewModel:
-                    var tagViewModel = new TagViewModel();
-                    tagViewModel.ViewModelContainer = _containerViewModel;
-                    tagManageViewModel.AddTag(tagViewModel);
-                    break;
-                case ArticleViewModel articleViewModel:
-                    var window = new MakeTagWindow(_containerViewModel);
-                    window.ShowDialog();
-                    break;
-            }
+            new Windows.MakeTagWindow(_containerViewModel)?.ShowDialog();
         }
     }
 }

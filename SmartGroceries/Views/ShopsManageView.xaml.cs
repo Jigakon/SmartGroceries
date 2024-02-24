@@ -23,6 +23,25 @@ namespace SmartGroceries.Views
         public ShopsManageView()
         {
             InitializeComponent();
+
+            IsCompactDisplay.IsChecked = (Application.Current as App).preferences.GlobalCompactMode;
+            ChangeDisplayMode();
+        }
+
+        private void ChangeDisplayMode()
+        {
+            string key = "ShopTemplate";
+            if (IsCompactDisplay.IsChecked == true)
+                key = "ShopTemplateCompact";
+
+            var template = TryFindResource(key);
+            if (template != null)
+                lbShops.ItemTemplate = template as DataTemplate;
+        }
+
+        private void IsCompactDisplay_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeDisplayMode();
         }
     }
 }

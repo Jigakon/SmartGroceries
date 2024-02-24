@@ -13,26 +13,28 @@ namespace SmartGroceries.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-    
+
         public Tag()
         {
             Id = Guid.Empty;
             Name = "New Tag";
-            Color = "#FF0000FF";
+            Color = App.GetColorAsString("AccentColor");
         }
 
-        public Tag(string name = "New Tag", string color = "#FF0000FF")
+        public Tag(string name = "New Tag", string color = null)
         {
             Id = Guid.NewGuid();
             Name = name;
-            Color = color;
+            Color = color ?? App.GetColorAsString("AccentColor");
         }
 
-        public Tag(Guid id, string name = "New Tag", string color = "#FF0000FF")
+        public Tag(Guid id, string name = "New Tag", string color = null)
         {
             Id = id;
             Name = name;
-            Color = color;
+            Color = color ?? App.GetColorAsString("AccentColor");
         }
+
+        public readonly static Tag Empty = new Tag(Guid.Empty, "");
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartGroceries.Models
@@ -11,14 +12,15 @@ namespace SmartGroceries.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Brand { get; set; }
-        public List<Guid> TagIDs { get; set; }
+        public Guid TagID { get; set; }
 
+        //used for JsonSerializer
         public ArticleDTO() 
         {
             Id = Guid.Empty; 
             Name = "Debug::ArticleDTO::Name";
             Brand = "Debug::ArticleDTO::Brand";
-            TagIDs = new List<Guid>();
+            TagID = Guid.Empty;
         }
 
         public ArticleDTO(Article article) 
@@ -26,19 +28,16 @@ namespace SmartGroceries.Models
             Id = article.Id;
             Name = article.Name;
             Brand = article.Brand;
-            TagIDs = new List<Guid>();
-            foreach (var item in article.Tags)
-                TagIDs.Add(item.Id);
+            TagID = article.Tag?.Id ?? Guid.Empty;
         }
 
         public Article MakeArticle()
         {
-            var article = GlobalDatabase.GetArticle(Id);
+            var article = GlobalDatabase.TryGetArticle(Id);
             if (article == null) 
             {
-                article = new Article(Id, Name, Brand);
-                foreach(var tagID in TagIDs)
-                    article.Tags.Add(GlobalDatabase.TryGetTag(tagID));
+                Tag tag = TagID != Guid.Empty ? GlobalDatabase.TryGetTag(TagID) : null;
+                article = new Article(Id, Name, Brand, tag);
             }
             return article;
         }

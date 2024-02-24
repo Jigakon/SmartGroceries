@@ -18,7 +18,7 @@ namespace SmartGroceries.Commands
 
         public override void Execute(object parameter)
         {
-            _articleInfosManageViewModel.AddArticleInfo(new ArticleInfoViewModel(_articleInfosManageViewModel));
+            _articleInfosManageViewModel.AddArticleInfo(new ViewModels.ArticleInfoViewModel(_articleInfosManageViewModel));
         }
     }
 }

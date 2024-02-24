@@ -21,8 +21,7 @@ namespace SmartGroceries.Commands
 
         public override void Execute(object parameter)
         {
-            var shopViewModel = new ShopViewModel(new Models.Shop(), _navigationStore);
-            _shopsManageViewModel.AddShop(shopViewModel);
+            _shopsManageViewModel.AddShop(new ViewModels.ShopViewModel(new Models.Shop(), _shopsManageViewModel, _navigationStore));
         }
     }
 }

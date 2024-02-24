@@ -14,6 +14,7 @@ namespace SmartGroceries.Models
         public List<ArticleInfo> ArticleInfos { get; set; }
         public Unit ArticleUnit { get; set; }
         public float UnitQuantity { get; set; }
+        public bool IsUnitFixed { get; set; }
 
         public ShopArticleDTO()
         {
@@ -21,6 +22,7 @@ namespace SmartGroceries.Models
             ArticleInfos = new List<ArticleInfo>();
             ArticleUnit = Unit.Weight;
             UnitQuantity = -1f;
+            IsUnitFixed = false;
         }
 
         public ShopArticleDTO(ShopArticle shopArticle)
@@ -29,12 +31,13 @@ namespace SmartGroceries.Models
             ArticleInfos = shopArticle.ArticleInfos;
             ArticleUnit = shopArticle.ArticleUnit;
             UnitQuantity = shopArticle.UnitQuantity;
+            IsUnitFixed= shopArticle.IsUnitFixed;
         }
 
         public ShopArticle MakeShopArticle(Shop shop)
         {
-            Article article = GlobalDatabase.GetArticle(ArticleID);
-            return new ShopArticle(shop, article, ArticleInfos, ArticleUnit, UnitQuantity);
+            Article article = GlobalDatabase.TryGetArticle(ArticleID);
+            return new ShopArticle(shop, article, ArticleInfos, ArticleUnit, UnitQuantity, IsUnitFixed);
         }
     }
 }

@@ -30,13 +30,13 @@ namespace SmartGroceries.Models
             Group = shop.Group;
             Location = shop.Location;
             ShopArticleDTO = new List<ShopArticleDTO>();
-            foreach(var shopArticle in  shop.ShopArticles)
+            foreach(var shopArticle in  shop.ShopArticles.Values)
                 ShopArticleDTO.Add(new ShopArticleDTO(shopArticle));
         }
 
         public Shop MakeShop()
         {
-            Shop shop = GlobalDatabase.GetShop(Id);
+            Shop shop = GlobalDatabase.TryGetShop(Id);
             if (shop == null)
             {
                 shop = new Shop(Id, Name, Group, Location);

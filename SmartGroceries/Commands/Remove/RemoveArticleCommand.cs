@@ -19,14 +19,7 @@ namespace SmartGroceries.Commands
 
         public override void Execute(object parameter)
         {
-            var articlesManageViewModel = _articleViewModel.ViewModelContainer as ArticlesManageViewModel;
-            if (articlesManageViewModel != null) 
-            { 
-                articlesManageViewModel.RemoveArticle(_articleViewModel);
-            }
-
-            // temp : save in Json the changes
-            GlobalDatabase.SaveArticlesInJSON();
+            (_articleViewModel?.ViewModelContainer as ArticlesManageViewModel)?.Remove(_articleViewModel);
         }
     }
 }

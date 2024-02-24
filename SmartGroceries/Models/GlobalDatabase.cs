@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Shapes;
 
 namespace SmartGroceries.Models
@@ -13,7 +14,8 @@ namespace SmartGroceries.Models
     public class GlobalDatabase
     {
         private static GlobalDatabase instance;
-        public static GlobalDatabase Instance { 
+        public static GlobalDatabase Instance
+        {
             get
             {
                 if (instance == null)
@@ -36,11 +38,12 @@ namespace SmartGroceries.Models
         private Dictionary<Guid, Tag> _tags;
         public IEnumerable<Tag> Tags => _tags.Values.ToList();
 
+        #region TagsJSON
         private string _pathToTags = string.Empty;
 
         public static bool SetTagPath(string newPath)
         {
-            if (!PathExists(newPath)) return false;
+            if (!PathExists(newPath) || Instance._pathToTags == newPath) return false;
             Instance._pathToTags = newPath;
             return true;
         }
@@ -56,43 +59,6 @@ namespace SmartGroceries.Models
             if (Tags == null) return false;
             foreach (var tag in Tags)
                 instance._tags.Add(tag.Id, tag);
-            return true;
-        }
-
-        public static Tag TryGetTag(Guid tagID)
-        {
-            Instance._tags.TryGetValue(tagID, out Tag tag);
-            return tag;
-        }
-
-        public static Tag TryGetTag(string name, string color)
-        {
-            return Instance._tags.FirstOrDefault(x => x.Value.Name == name && x.Value.Color == color).Value;
-        }
-
-        public static void TryAddTag(Tag tag)
-        {
-            Instance._tags.TryGetValue(tag.Id, out var searchedTag);
-            if (searchedTag == null)
-                instance._tags.Add(tag.Id, tag);
-        }
-
-        public static void TryAddTags(List<Tag> tags)
-        {
-            if (!PathExists(Instance._pathToTags)) return;
-
-            foreach (var tag in tags)
-                TryAddTag(tag);
-        }
-
-        public static bool SaveTags(List<Tag> tags)
-        {
-            if (!PathExists(Instance._pathToTags)) return false;
-
-            instance._tags.Clear();
-            foreach (var tag in tags)
-                instance._tags.Add(tag.Id, tag);
-
             return true;
         }
 
@@ -112,15 +78,64 @@ namespace SmartGroceries.Models
         }
         #endregion
 
+        public static bool HasTag(Guid id)
+        {
+            return instance._tags.ContainsKey(id);
+        }
+        public static Tag TryGetTag(Guid tagID)
+        {
+            Instance._tags.TryGetValue(tagID, out Tag tag);
+            return tag;
+        }
+        public static Tag TryGetTag(string name, string color)
+        {
+            return Instance._tags.FirstOrDefault(x => x.Value.Name == name && x.Value.Color == color).Value;
+        }
+        public static bool TryAddTag(Tag tag)
+        {
+            if (tag == null) return false;
+            Instance._tags.TryGetValue(tag.Id, out var searchedTag);
+            if (searchedTag == null)
+            {
+                instance._tags.Add(tag.Id, tag);
+                return true;
+            }
+            return false;
+        }
+        public static void ModifyOrAddTag(Tag tag)
+        {
+            if (tag.Id == Guid.Empty) return;
+            var searchedTag = TryGetTag(tag.Id);
+            if (searchedTag != null)
+            {
+                searchedTag.Name = tag.Name;
+                searchedTag.Color = tag.Color;
+            }
+            else
+                TryAddTag(tag);
+        }
+        public static void RemoveTag(Tag tag) => RemoveTag(tag.Id);
+        public static void RemoveTag(Guid tagID)
+        {
+            Instance._tags.Remove(tagID);
+            foreach (Article article in Instance._articles.Values)
+            {
+                if (article.Tag == null) continue;
+                if (article.Tag.Id == tagID)
+                    article.RemoveTag();
+            }
+        }
+        #endregion
+
         #region Articles
         private Dictionary<Guid, Article> _articles;
         public IEnumerable<Article> Articles => _articles.Values.ToList();
 
+        #region ArticlesJSON
         private string _pathToArticles = string.Empty;
-
         public static bool SetArticlePath(string newPath)
         {
-            if (!PathExists(newPath)) return false;
+            if (!PathExists(newPath) || Instance._pathToArticles == newPath) return false;
             Instance._pathToArticles = newPath;
             return true;
         }
@@ -144,30 +159,6 @@ namespace SmartGroceries.Models
             return true;
         }
 
-        public static bool SaveArticles(List<Article> articles)
-        {
-            if (!PathExists(Instance._pathToArticles)) return false;
-
-            instance._articles.Clear();
-            foreach (var article in articles)
-                instance._articles.Add(article.Id, article);
-
-            return true;
-        }
-
-        public static bool SaveArticle(Article article)
-        {
-            if (!PathExists(Instance._pathToArticles)) return false;
-
-            instance._articles.TryGetValue(article.Id, out Article searchedArticle);
-            if (searchedArticle == null)
-                instance._articles.Add(article.Id, article);
-            else
-                searchedArticle = article;
-
-            return true;
-        }
-
         public static bool SaveArticlesInJSON()
         {
             if (!PathExists(Instance._pathToArticles)) return false;
@@ -185,20 +176,35 @@ namespace SmartGroceries.Models
 
             return true;
         }
+        #endregion
 
+        public static bool SaveArticle(Article article)
+        {
+            instance._articles.TryGetValue(article.Id, out Article searchedArticle);
+            if (searchedArticle == null)
+                instance._articles.Add(article.Id, article);
+            else
+            {
+                searchedArticle.Tag = article.Tag;
+            }
+
+            return true;
+        }
         public static bool HasArticle(Guid id)
         {
             return Instance._articles.ContainsKey(id);
         }
-
-        public static Article GetArticle(Guid id)
+        public static Article TryGetArticle(Guid id)
         {
-            Instance._articles.TryGetValue(id, out var article);
+            Instance._articles.TryGetValue(id, out Article article);
             return article;
         }
-        public static Article GetArticle(string name, string brand)
+        public static Article TryGetArticle(string name, string brand, bool caseSensitive = false)
         {
-            return Instance._articles.FirstOrDefault(x => x.Value.Name == name && x.Value.Brand == brand).Value;
+            if (caseSensitive)
+                return Instance._articles.FirstOrDefault(x => x.Value.Name == name && x.Value.Brand == brand).Value;
+            string nameLower = name.ToLower(), brandLower = brand.ToLower();
+            return Instance._articles.FirstOrDefault(x => x.Value.Name.ToLower() == nameLower && x.Value.Brand.ToLower() == brandLower).Value;
         }
         public static bool TryAddArticle(Article article)
         {
@@ -209,18 +215,50 @@ namespace SmartGroceries.Models
             }
             return false;
         }
-
+        public static void TryAddArticles(List<Article> Articles)
+        {
+            foreach (var Article in Articles)
+                TryAddArticle(Article);
+        }
+        public static bool ModifyArticle(Article article)
+        {
+            Article searchedArticle = TryGetArticle(article.Id);
+            if (searchedArticle != null)
+            {
+                TryAddTag(article.Tag);
+                searchedArticle.Name = article.Name;
+                searchedArticle.Brand = article.Brand;
+                searchedArticle.Tag = article.Tag;
+                return true;
+            }
+            return false;
+        }
+        public static void ModifyOrAddArticle(Article article)
+        {
+            if (!ModifyArticle(article))
+                TryAddArticle(article);
+        }
+        public static void RemoveArticle(Article article) => RemoveArticle(article.Id);
+        public static void RemoveArticle(Guid articleID)
+        {
+            Instance._articles.Remove(articleID);
+            // remove article from all shops
+            foreach (Shop shop in Instance._shops.Values)
+                shop.RemoveArticle(articleID);
+            //
+        }
         #endregion
 
         #region Shops
         private Dictionary<Guid, Shop> _shops;
         public IEnumerable<Shop> Shops => _shops.Values.ToList();
 
+        #region ShopsJSON
         private string _pathToShops = string.Empty;
 
         public static bool SetShopPath(string newPath)
         {
-            if (!PathExists(newPath)) return false;
+            if (!PathExists(newPath) || Instance._pathToShops == newPath) return false;
             Instance._pathToShops = newPath;
             return true;
         }
@@ -241,36 +279,6 @@ namespace SmartGroceries.Models
             return true;
         }
 
-        public static bool SaveShops(List<Shop> shops)
-        {
-            if (!PathExists(Instance._pathToShops)) return false;
-
-            instance._shops.Clear();
-            foreach (var shop in shops)
-                instance._shops.Add(shop.Id, shop);
-
-            return true;
-        }
-
-        public static bool SaveShop(Shop shop)
-        {
-            if (!PathExists(Instance._pathToShops)) return false;
-
-            instance._shops.TryGetValue(shop.Id, out Shop searchedShop);
-            if (searchedShop != null)
-            {
-                searchedShop.Name = shop.Name;
-                searchedShop.Group = shop.Group;
-                searchedShop.Location = shop.Location;
-                searchedShop.ShopArticles = shop.ShopArticles;
-            }
-            else
-            {
-                instance._shops.Add(shop.Id, shop);
-            }
-            return true;
-        }
-
         public static bool SaveShopsInJSON()
         {
             if (!PathExists(Instance._pathToShops)) return false;
@@ -285,18 +293,89 @@ namespace SmartGroceries.Models
 
             return true;
         }
+        #endregion
 
-        public static void AddShop(Shop shop)
+        public static bool SaveShop(Shop shop)
         {
-            Instance._shops.TryGetValue(shop.Id, out Shop searchedShop);
-            if (searchedShop == null)
-                Instance._shops.Add(shop.Id, shop);
+            instance._shops.TryGetValue(shop.Id, out Shop searchedShop);
+            if (searchedShop != null)
+            {
+                searchedShop.Name = shop.Name;
+                searchedShop.Group = shop.Group;
+                searchedShop.Location = shop.Location;
+                searchedShop.ShopArticles = shop.ShopArticles;
+                return true;
+            }
+            else if (!string.IsNullOrEmpty(shop.Name))
+            {
+                instance._shops.Add(shop.Id, shop);
+                return true;
+            }
+            return false;
+        }
+        public static bool HasShop(Guid id)
+        {
+            return Instance._shops.ContainsKey(id);
+        }
+        public static Shop TryGetShop(string ShopName, string ShopGroup = null, string ShopAddress = null)
+        {
+            return Instance._shops.FirstOrDefault(x => x.Value.Name == ShopName && (string.IsNullOrEmpty(ShopGroup) || x.Value.Group == ShopGroup) && (string.IsNullOrEmpty(ShopAddress) || x.Value.Location == ShopAddress)).Value;
         }
 
-        public static Shop GetShop(Guid id)
+        public static Shop TryGetShop(Guid id)
         {
             Instance._shops.TryGetValue(id, out var shop);
             return shop;
+        }
+        private static bool TryAddShopArticle(ShopArticle shopArticle)
+        {
+            if (shopArticle == null) return false;
+            Instance._articles.TryGetValue(shopArticle.Article.Id, out var searchedArticle);
+            if (searchedArticle == null)
+            {
+                instance._articles.Add(shopArticle.Article.Id, shopArticle.Article);
+                return true;
+            }
+            return false;
+        }
+        private static void TryAddShopArticles(List<ShopArticle> shopArticles)
+        {
+            foreach (var shopArticle in shopArticles)
+                TryAddShopArticle(shopArticle);
+        }
+        public static bool TryAddShop(Shop shop)
+        {
+            if (!HasShop(shop.Id))
+            {
+                TryAddShopArticles(shop.ShopArticles.Values.ToList());
+                Instance._shops.Add(shop.Id, shop);
+                return true;
+            }
+            return false;
+        }
+        public static bool ModifyShop(Shop shop)
+        {
+            Shop searchedShop = TryGetShop(shop.Id);
+            if (searchedShop != null)
+            {
+                TryAddShopArticles(shop.ShopArticles.Values.ToList());
+                searchedShop.Name = shop.Name;
+                searchedShop.Group = shop.Group;
+                searchedShop.Location = shop.Location;
+                return true;
+            }
+            return false;
+        }
+        public static void ModifyOrAddShop(Shop shop)
+        {
+            if (!ModifyShop(shop))
+                TryAddShop(shop);
+        }
+        public static void RemoveShop(Shop shop) => RemoveArticle(shop.Id);
+        public static void RemoveShop(Guid shopID)
+        {
+            Instance._shops.Remove(shopID);
+            // delete carts with removed shop ?
         }
         #endregion
 
@@ -304,11 +383,12 @@ namespace SmartGroceries.Models
         public Dictionary<Guid, Cart> _carts;
         public IEnumerable<Cart> Carts => _carts.Values.ToList();
 
+        #region CartsJSON
         private string _pathToCarts = string.Empty;
 
         public static bool SetCartPath(string newPath)
         {
-            if (!PathExists(newPath)) return false;
+            if (!PathExists(newPath) || Instance._pathToCarts == newPath) return false;
             Instance._pathToCarts = newPath;
             return true;
         }
@@ -328,52 +408,27 @@ namespace SmartGroceries.Models
                 instance._carts.Add(cartDTO.Id, cartDTO.MakeCart());
             return true;
         }
-
-        public static bool SaveCarts(List<Cart> carts)
+        public static bool SaveCartsInJSON()
         {
             if (!PathExists(Instance._pathToCarts)) return false;
 
-            instance._carts.Clear();
-            foreach (var cart in carts)
-                instance._carts.Add(cart.Id, cart);
+            if (instance._carts == null) return false;
+            List<CartDTO> Carts = new List<CartDTO>();
+            foreach (var cart in instance._carts.Values)
+                Carts.Add(new CartDTO(cart));
+            string json = JsonSerializer.Serialize(Carts);
+            if (string.IsNullOrEmpty(json)) return false;
+            File.WriteAllText(instance._pathToCarts, json);
 
             return true;
         }
+        #endregion
 
         public static bool SaveCart(Cart cart)
         {
-            /*
-            foreach(CartArticle cartArticle in cart.CartArticles)
-            {
-                TAGS
-                foreach(Tag tag in cartArticle.Tag)
-                    if (tag doesn't exists)
-                        save tag in database
-
-                ARTICLES
-                if (does the article not exists)
-                    save this article in database
-
-                ARTICLE IN SHOP
-                if (is article not registered in shop)
-                    shop.registerArticle(article)
-
-                ARTICLEINFO IN SHOPARTICLE
-                if (is articleInfo exists in shop)
-                    shop.AddInfo(article.id, articleInfo)
-                
-            }
-            SHOP
-            if (does the shop not exists)
-                save this new shop in database
-
-            SAVE CART
-            */
-            if (!PathExists(Instance._pathToShops)) return false;
-
             foreach (var cartArticle in cart.CartArticles)
             {
-                TryAddTags(cartArticle.Article.Tags);
+                TryAddTag(cartArticle.Article.Tag);
                 SaveArticle(cartArticle.Article);
                 cart.Shop.TryAddArticle(cartArticle.Article);
                 cart.Shop.AddArticleInfo(cartArticle.Article.Id, new ArticleInfo(cartArticle.Price, cart.Date));
@@ -396,21 +451,6 @@ namespace SmartGroceries.Models
             return true;
         }
 
-        public static bool SaveCartsInJSON()
-        {
-            if (!PathExists(Instance._pathToCarts)) return false;
-
-            if (instance._carts == null) return false;
-            List<CartDTO> Carts = new List<CartDTO>();
-            foreach (var cart in instance._carts.Values)
-                Carts.Add(new CartDTO(cart));
-            string json = JsonSerializer.Serialize(Carts);
-            if (string.IsNullOrEmpty(json)) return false;
-            File.WriteAllText(instance._pathToCarts, json);
-
-            return true;
-        }
-
         public static void AddCart(Cart cart)
         {
             Instance._carts.TryGetValue(cart.Id, out Cart searchedCart);
@@ -422,6 +462,62 @@ namespace SmartGroceries.Models
         {
             Instance._carts.TryGetValue(id, out var cart);
             return cart;
+        }
+        public static bool ReplaceCarts(List<Cart> carts)
+        {
+            instance._carts.Clear();
+            foreach (var cart in carts)
+                instance._carts.Add(cart.Id, cart);
+
+            return true;
+        }
+
+        public static void RemoveCart(Guid cartID)
+        {
+            Instance._carts.Remove(cartID);
+            // remove ArticleInfos saved in Database ?
+        }
+
+        internal static Cart TryGetCart(Guid id)
+        {
+            if (id == Guid.Empty) return null;
+            Instance._carts.TryGetValue(id, out var cart);
+            return cart;
+        }
+
+        internal static Cart TryGetCart(DateTime date, string shopName, string cartName = null)
+        {
+            var carts = Instance._carts.Values.Where(x => x.Date == date && (x?.Shop?.Name ?? "") == shopName).ToList();
+            if (carts.Count == 1 || string.IsNullOrEmpty(cartName))
+                return carts[0];
+            return carts.FirstOrDefault(x => x.Name == cartName);
+        }
+
+        internal static void ModifyOrAddCart(Cart cart)
+        {
+            if (!ModifyCart(cart))
+                TryAddCart(cart);
+        }
+
+        private static bool TryAddCart(Cart cart)
+        {
+            if (!HasCart(cart.Id))
+            {
+
+                //Instance._shops.Add(shop.Id, shop);
+                return true;
+            }
+            return false;
+        }
+
+        private static bool HasCart(Guid id)
+        {
+            return Instance._carts.ContainsKey(id);
+        }
+
+        private static bool ModifyCart(Cart cart)
+        {
+            return false;
         }
         #endregion
     }

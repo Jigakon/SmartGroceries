@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:SmartGroceries">
     <!--StartupUri="MainWindow.xaml">-->
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ColorResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

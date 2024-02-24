@@ -10,17 +10,16 @@ namespace SmartGroceries.Commands
 {
     internal class MakeShopArticleCommand : CommandBase
     {
-        private readonly ViewModels.ShopManageViewModel _shopManageViewModel;
+        private readonly ViewModels.ShopArticlesManageViewModel _shopManageViewModel;
 
-        public MakeShopArticleCommand(ViewModels.ShopManageViewModel shopManageViewModel)
+        public MakeShopArticleCommand(ViewModels.ShopArticlesManageViewModel shopManageViewModel)
         {
             _shopManageViewModel = shopManageViewModel;
         }
 
         public override void Execute(object parameter)
         {
-            var window = new MakeShopArticleWindow(_shopManageViewModel);
-            window.ShowDialog();
+            new Windows.MakeShopArticleWindow(_shopManageViewModel).ShowDialog();
         }
     }
 }

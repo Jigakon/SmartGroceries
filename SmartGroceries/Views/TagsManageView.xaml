@@ -14,8 +14,7 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <DockPanel Background="#00000000"
-            HorizontalAlignment="Stretch">
+        <DockPanel Background="Transparent" Margin="20" HorizontalAlignment="Stretch">
             <!-- Title -->
             <TextBlock 
                 DockPanel.Dock="Top"
@@ -24,15 +23,14 @@
                 FontWeight="Bold"
                 Width="auto"
                 Height="auto"
-                Margin="30,20,0,20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
-                MaxHeight="60"
-                Margin="0 20">
+                MaxHeight="60">
                 <Button Content="Add Tag"
                     Padding="5"
                     Margin="0 0 10 0"
@@ -57,15 +55,16 @@
             </StackPanel>
 
             <!-- List of Tags from ItemManager -->
-            <ListView 
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
+            <ListView Margin="0 20"
                 Background="Transparent"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 VirtualizingPanel.ScrollUnit="Pixel"                
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Margin="20 0 20 0" BorderThickness="0"
-                ItemsSource="{Binding SearchedViewModels}"
-                ItemTemplate="{StaticResource TagTemplate}" HorizontalContentAlignment="Stretch">
+                BorderThickness="0"
+                ItemTemplate="{StaticResource TagTemplate}"
+                ItemsSource="{Binding SearchedViewModels}">
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Add New Tag" Command="{Binding MakeTagCommand}" Background="WhiteSmoke"/>
@@ -77,6 +76,7 @@
                     <ContextMenu x:Key="ItemContextMenu">
                         <!-- add a rename button to allow label changes only when needed -->
                         <!-- add a change color button with color wheel -->
+                        <MenuItem Header="Edit" Command="{Binding EditTagCommand}" Background="WhiteSmoke" />
                         <MenuItem Header="Delete" Command="{Binding DeleteTagCommand}" Background="WhiteSmoke" />
                     </ContextMenu>
                 </ListView.Resources>

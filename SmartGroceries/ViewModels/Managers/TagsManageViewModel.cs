@@ -10,12 +10,16 @@ using System.Windows.Input;
 
 namespace SmartGroceries.ViewModels
 {
-    public class TagsManageViewModel : ViewModelBase
+    public class TagsManageViewModel : ViewModelBase, ViewModelManage
     {
         private ObservableCollection<TagViewModel> _tags { get; set; }
         public ObservableCollection<TagViewModel> SearchedViewModels { get => _tags; }
+        private List<Guid> RemovedTags = new List<Guid>();
+
+        #region Commands
         public ICommand MakeTagCommand { get; }
         public ICommand SaveTagsCommand { get; }
+        #endregion
 
         public List<Tag> Tags
         {
@@ -33,7 +37,7 @@ namespace SmartGroceries.ViewModels
             _tags = new ObservableCollection<TagViewModel>();
 
             MakeTagCommand = new Commands.MakeTagCommand(this);
-            SaveTagsCommand = new Commands.SaveTagsCommand(this);
+            SaveTagsCommand = new Commands.SaveManageCommand(this);
 
             ResetTags();
         }
@@ -53,18 +57,24 @@ namespace SmartGroceries.ViewModels
         public void AddTag(TagViewModel tagViewModel)
         {
             _tags.Add(tagViewModel);
-            OnPropertyChanged(nameof(SearchedViewModels));
-        }
 
-        public void RemoveTag(TagViewModel tagViewModel)
-        {
-            _tags.Remove(tagViewModel);
             OnPropertyChanged(nameof(SearchedViewModels));
         }
 
         public void Save()
         {
-            GlobalDatabase.SaveTags(Tags);
+            foreach(var tagID in RemovedTags)
+                GlobalDatabase.RemoveTag(tagID);
+            foreach (var tag in _tags)
+                tag.Save();
+        }
+
+        public void Remove(ViewModelData viewModel)
+        {
+            var tagViewModel = viewModel as TagViewModel;
+            _tags.Remove(tagViewModel);
+            RemovedTags.Add(tagViewModel.Id);
+            OnPropertyChanged(nameof(SearchedViewModels));
         }
     }
 }

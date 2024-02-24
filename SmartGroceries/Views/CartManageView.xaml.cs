@@ -2,6 +2,7 @@
 using SmartGroceries.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace SmartGroceries.Views
         public CartManageView()
         {
             InitializeComponent();
+
+            IsCompactDisplay.IsChecked = (Application.Current as App).preferences.GlobalCompactMode;
+            ChangeDisplayMode();
         }
 
         private void ShopCart_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -32,8 +36,23 @@ namespace SmartGroceries.Views
             var shop = (ShopCart.SelectedItem as Shop);
             if (shop != null)
             {
-                (DataContext as CartManageViewModel).Shop = shop;
+                (DataContext as CartArticlesManageViewModel).Shop = shop;
             }
+        }
+        private void ChangeDisplayMode()
+        {
+            string key = "CartArticleTemplate";
+            if (IsCompactDisplay.IsChecked == true)
+                key = "CartArticleTemplateCompact";
+
+            var template = TryFindResource(key);
+            if (template != null)
+                lbCartArticles.ItemTemplate = template as DataTemplate;
+        }
+
+        private void IsCompactDisplay_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeDisplayMode();
         }
     }
 }

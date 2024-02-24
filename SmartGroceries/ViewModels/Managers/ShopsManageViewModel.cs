@@ -10,40 +10,18 @@ using System.Windows.Input;
 
 namespace SmartGroceries.ViewModels
 {
-    public class ShopsManageViewModel : ViewModelBase
+    public class ShopsManageViewModel : ViewModelBase, ViewModelManage
     {
         private readonly Stores.NavigationStore _navigationStore;
+
         private ObservableCollection<ShopViewModel> _shopViewModels { get; set; }
         public ObservableCollection<ShopViewModel> SearchedViewModels { get => _shopViewModels; }
-
+        private List<Guid> RemovedShops = new List<Guid>();
+        
+        #region Commands
         public ICommand MakeShopCommand { get; }
         public ICommand SaveShopsCommand { get; }
-
-        public List<Shop> Shops
-        {
-            get
-            {
-                List<Shop> shops = new List<Shop>();
-                foreach (var shopViewModel in _shopViewModels)
-                {
-                    Shop shop = GlobalDatabase.GetShop(shopViewModel.Id);
-                    if (shop == null) 
-                    { 
-                        shop = new Shop(shopViewModel.Id, shopViewModel.Name, shopViewModel.Group, shopViewModel.Location);
-                        foreach (var shopArticleViewModel in shopViewModel.Articles)
-                            shop.TryAddArticle(new ShopArticle(shop, shopArticleViewModel.Article));
-                    }
-                    else
-                    {
-                        shop.Name = shopViewModel.Name;
-                        shop.Group = shopViewModel.Group;
-                        shop.Location = shopViewModel.Location;
-                    }
-                    shops.Add(shop);
-                }
-                return shops;
-            }
-        }
+        #endregion
 
         public ShopsManageViewModel(Stores.NavigationStore navigationStore)
         {
@@ -52,7 +30,7 @@ namespace SmartGroceries.ViewModels
             _shopViewModels = new ObservableCollection<ShopViewModel>();
 
             MakeShopCommand = new Commands.MakeShopCommand(this, navigationStore);
-            SaveShopsCommand = new Commands.SaveShopsCommand(this);
+            SaveShopsCommand = new Commands.SaveManageCommand(this);
 
             ResetShops();
         }
@@ -61,7 +39,7 @@ namespace SmartGroceries.ViewModels
         {
             _shopViewModels.Clear();
             foreach (var shop in GlobalDatabase.Instance.Shops)
-                _shopViewModels.Add(new ShopViewModel(shop, _navigationStore));
+                _shopViewModels.Add(new ShopViewModel(shop, this, _navigationStore));
             OnPropertyChanged(nameof(SearchedViewModels));
         }
 
@@ -72,15 +50,20 @@ namespace SmartGroceries.ViewModels
             Save();
         }
 
-        public void RemoveArticle(ShopViewModel shopViewModel)
-        {
-            _shopViewModels.Remove(shopViewModel);
-            OnPropertyChanged(nameof(SearchedViewModels));
-        }
-
         public void Save()
         {
-            GlobalDatabase.SaveShops(Shops);
+            foreach (var shopID in RemovedShops)
+                GlobalDatabase.RemoveShop(shopID);
+            foreach (var shopViewModel in _shopViewModels)
+                shopViewModel.Save();
+        }
+
+        public void Remove(ViewModelData viewModel)
+        {
+            var shopViewModel = viewModel as ShopViewModel;
+            _shopViewModels.Remove(shopViewModel);
+            OnPropertyChanged(nameof(SearchedViewModels));
+            RemovedShops.Add(shopViewModel.Id);
         }
     }
 }

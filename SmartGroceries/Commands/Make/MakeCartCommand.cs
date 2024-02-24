@@ -12,15 +12,15 @@ namespace SmartGroceries.Commands
         private readonly Stores.NavigationStore _navigationStore;
         private readonly ViewModels.CartsManageViewModel _cartsManageViewModel;
 
-        public MakeCartCommand(ViewModels.CartsManageViewModel cartsManageViewModel)
+        public MakeCartCommand(ViewModels.CartsManageViewModel cartsManageViewModel, Stores.NavigationStore navigationStore)
         {
             _cartsManageViewModel = cartsManageViewModel;
+            _navigationStore = navigationStore;
         }
 
         public override void Execute(object parameter)
         {
-            var cartViewModel = new CartViewModel(new Models.Cart(), _navigationStore);
-            _cartsManageViewModel.AddCart(cartViewModel);
+            _cartsManageViewModel.AddCart(new ViewModels.CartViewModel(new Models.Cart(), _cartsManageViewModel, _navigationStore));
         }
     }
 }

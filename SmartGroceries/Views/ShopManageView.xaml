@@ -4,23 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartGroceries.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <DataTemplate x:Key="TagTemplate">
-            <Border Background="{Binding Color}" CornerRadius="5" MinWidth="50" Margin="0" Height="20" VerticalAlignment="Top">
-                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <Border Background="{Binding Value.Color}" CornerRadius="5" MinWidth="50" Margin="0" Height="20" VerticalAlignment="Top">
+                <TextBlock Text="{Binding Value.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
             </Border>
         </DataTemplate>
 
         <DataTemplate x:Key="ShopArticleTemplate">
             <Border x:Name="ArticleElement"
-                HorizontalAlignment="Stretch"
-                Width="auto"
-                Background="BlueViolet" Padding="10" Margin="0 0 0 10" CornerRadius="5">
+                Background="{StaticResource ElementBackgroundColor}" Padding="2.5 5" Margin="0" CornerRadius="5">
                 <Border.InputBindings>
-                    <MouseBinding MouseAction="LeftDoubleClick"
-                        Command="{Binding GoToArticleInfoManageCommand}"/>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding GoToArticleInfoManageCommand}"/>
                 </Border.InputBindings>
                 <!-- Article Body -->
                 <Grid>
@@ -31,17 +29,20 @@
                     <!-- Article Picture ? -->
                     <Rectangle x:Name="ArticlePicture"
                         Grid.Column="0" 
+                        Margin="2.5 0"
+                        RadiusX="5"
+                        RadiusY="{Binding ElementName=ArticlePicture, Path=RadiusX}"
                         Fill="Gray"/>
 
                     <!-- Article Data Content-->
-                    <StackPanel Grid.Column="1" Margin="10 0">
+                    <StackPanel Grid.Column="1" >
                         <!-- Article Name -->
-                        <Grid>
+                        <Grid Margin="0 0 0 2.5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="AliceBlue" CornerRadius="5" Margin="0 0 5 0">
+                            <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                                 <TextBox x:Name="ArticleName"
                                     Background="Transparent" 
                                     BorderThickness="0" 
@@ -51,7 +52,7 @@
                                     Margin="5"/>
                             </Border>
                             <!-- Article Brand -->
-                            <Border Grid.Column="1" Background="AliceBlue" CornerRadius="5" Margin="5 0 0 0">
+                            <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                                 <TextBox x:Name="ArticleBrand"
                                     Background="Transparent"
                                     BorderThickness="0"
@@ -63,53 +64,28 @@
                         </Grid>
 
 
-                        <Grid>
+                        <Grid Margin="2.5 2.5 2.5 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Article Tags list -->
-                            <Border Grid.Column="0" Background="AliceBlue" Margin="0 10 5 0" CornerRadius="5">
-                                <ListView
-                                    Margin="5"
-                                    Height="50"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    
-                                    ItemTemplate="{StaticResource TagTemplate}"
-                                    ItemsSource="{Binding Article.Tags}">
-                                    <ListView.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Add Tag" Command="{Binding MakeTagCommand}" Background="WhiteSmoke"/>
-                                        </ContextMenu>
-                                    </ListView.ContextMenu>
-
-
-                                    <!-- items context menu -->
-                                    <ListView.Resources>
-                                        <ContextMenu x:Key="ArticleTagContextMenu">
-                                            <MenuItem Header="Delete" Command="{Binding DeleteTagCommand}" Background="WhiteSmoke" />
-                                        </ContextMenu>
-                                    </ListView.Resources>
-
-                                    <ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True"/>
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>
-
-                                    <!-- Set Context menu to all items -->
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListViewItem}" >
-                                            <Setter Property="ContextMenu" Value="{StaticResource ArticleTagContextMenu}" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
+                            <!-- Article Tag -->
+                            <Border Grid.Column="0" Background="{Binding ArticleTagColor}" CornerRadius="5" Margin="0 0 2.5 0">
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                                <TextBlock Text="{Binding ArticleTagName}" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold" 
+                                           FontSize="17"/>
                             </Border>
 
-                            <Border Grid.Column="1" Background="AliceBlue" Margin="5 10 5 0" CornerRadius="5" >
+                            <Border Grid.Column="1" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
                                 <TextBlock x:Name="ArticleUnit"
                                     Background="Transparent"
                                     Text="{Binding ArticleUnit}" 
@@ -118,7 +94,7 @@
                                     Margin="5"/>
                             </Border>
 
-                            <Border Grid.Column="2" Background="AliceBlue" Margin="5 10 5 0" CornerRadius="5" >
+                            <Border Grid.Column="2" Background="{StaticResource AccentColor}" Margin="2.5 0 0 0" CornerRadius="5" >
                                 <TextBlock x:Name="LastArticlePrice"
                                     Background="Transparent"
                                     Text="{Binding lastArticlePriceString}" 
@@ -131,38 +107,166 @@
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <DataTemplate x:Key="ShopArticleTemplateCompact">
+            <Border x:Name="ArticleElement"
+                    HorizontalAlignment="Stretch"
+                    Width="auto"
+                    Background="{StaticResource ElementBackgroundColor}" Padding="2.5 5" Margin="0" CornerRadius="5">
+                <Border.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding GoToArticleInfoManageCommand}"/>
+                </Border.InputBindings>
+                <!-- Article Body -->
+                <!-- Article Name -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!-- Name -->
+                    <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
+                        <TextBox x:Name="ArticleName"
+                                 Background="Transparent" 
+                                 BorderThickness="0" 
+                                 Text="{Binding Article.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="20" 
+                                 FontWeight="DemiBold" 
+                                 Margin="5"/>
+                    </Border>
+                    <!-- Brand -->
+                    <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
+                        <TextBox x:Name="ArticleBrand"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Text="{Binding Article.Brand}" 
+                                 FontSize="20" 
+                                 FontWeight="DemiBold" 
+                                 Margin="5"/>
+                    </Border>
+                    <!-- Tag -->
+                    <Border Grid.Column="2" Background="{Binding ArticleTagColor}" CornerRadius="5" Margin="2.5 0">
+                        <Border.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
+                            </ContextMenu>
+                        </Border.ContextMenu>
+                        <TextBlock Text="{Binding ArticleTagName}" 
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Center" 
+               FontWeight="SemiBold" 
+               FontSize="17"/>
+                    </Border>
+                    <!-- Unit -->
+                    <Border Grid.Column="3" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
+                        <DockPanel VerticalAlignment="Center" Margin="10 0">
+                            
+                            <TextBlock DockPanel.Dock="Right" x:Name="ArticleUnit" VerticalAlignment="Center"
+                                       Background="Transparent"
+                                       Text="{Binding UnitText}" 
+                                       FontSize="20" 
+                                       FontWeight="DemiBold" 
+                                       Margin="5">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu >
+                                        <MenuItem Header="Weight" Command="{Binding SetWeightCommand}"/>
+                                        <MenuItem Header="Volume" Command="{Binding SetVolumeCommand}"/>
+                                        <MenuItem Header="Piece" Command="{Binding SetPieceCommand}"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsUnitFixed}" VerticalAlignment="Center" FontSize="50" ToolTip="Is Unit Fixed">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <Rectangle Fill="{StaticResource ElementBackgroundColor}" Margin="10 5" DockPanel.Dock="Left" Width="5" Height="auto" RadiusX="2.5" RadiusY="2.5"></Rectangle>
+                            <xctk:DecimalUpDown DockPanel.Dock="Right" Value="{Binding UnitQuantity}" HorizontalAlignment="Stretch" ShowButtonSpinner="False" Minimum="0" Increment="0.1" BorderThickness="0" Background="Transparent" FontSize="20" FontWeight="DemiBold"/>
+                        </DockPanel>
+                    </Border>
+                    <!-- Price -->
+                    <Border Grid.Column="4" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                            <TextBlock x:Name="LastArticlePrice"
+                                       Background="Transparent"
+                                       Text="{Binding lastArticlePriceString}" 
+                                       FontSize="20" 
+                                       FontWeight="DemiBold" 
+                                       Margin="5" ToolTip="Last Price"/>
+                            <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- United Price -->
+                    <Border Grid.Column="5" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                            <TextBlock x:Name="LastArticlePriceByUnit"
+                                       Background="Transparent"
+                                       Text="{Binding lastArticlePriceByUnitString}" 
+                                       FontSize="20" 
+                                       FontWeight="DemiBold" 
+                                       Margin="5" ToolTip="Last Price"/>
+                            <TextBlock Text="€/" VerticalAlignment="Bottom" FontSize="17" FontWeight="DemiBold" Margin="0 0 0 5"/>
+                            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                       Text="{Binding UnitText}" 
+                                       FontSize="17" 
+                                       FontWeight="DemiBold" Margin="0 0 0 5"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
-        <DockPanel Background="Transparent"
+        <DockPanel Background="Transparent" Margin="20"
             Grid.Row="0">
-            <StackPanel
-                DockPanel.Dock="Top"
-                Orientation="Horizontal">
-                <Border Margin="10 0"  Background="red" Height="30" Width="30" CornerRadius="15">
-                    <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageShopsCommand}">
-                        <TextBlock Padding="0 0 0 5" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="red" Height="30" Width="30" CornerRadius="15">
+                    <Button Background="Transparent" VerticalAlignment="Center" BorderThickness="0" Command="{Binding GoToManageShopsCommand}">
+                        <TextBlock Padding="2.5 0 2.5 5" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     </Button>
                 </Border>
                 <!-- Title -->
                 <TextBlock 
-                DockPanel.Dock="Top"
-                FontSize="30"
-                FontWeight="Bold"
-                Width="auto"
-                Height="auto"
-                Margin="30,20,0,20" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Run>Shop : </Run>
-                <Run Text="{Binding Path=Name, Mode=OneWay}" FontWeight="Bold" />
+                    DockPanel.Dock="Top"
+                    FontSize="30"
+                    FontWeight="Bold"
+                    Width="auto"
+                    Height="auto"
+                    Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Run>Shop : </Run>
+                    <Run Text="{Binding Path=Name, Mode=OneWay}" FontWeight="Bold" />
                 </TextBlock>
+            </StackPanel>
+            
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <TextBlock Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
+            </StackPanel>
+            <!-- Search Bar -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 10 0 0">
+                <StackPanel Width="auto" Margin="0 0 5 0">
+                    <TextBlock Text="Name"/>
+                    <TextBox Text="{Binding SearchingName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" MinWidth="100"/>
+                </StackPanel>
+                <StackPanel Width="auto" Margin="5 0">
+                    <TextBlock Text="Brand"/>
+                    <TextBox Text="{Binding SearchingBrand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" MinWidth="100"/>
+                </StackPanel>
+                <ToggleButton x:Name="CaseSensitivity" Content="Aa"   Margin="5 0" MinWidth="30" Height="{Binding ElementName=CaseSensitivity, Path=ActualWidth}" VerticalAlignment="Bottom"
+                  IsChecked="{Binding SearchCaseSensitive}"></ToggleButton>
+                <ToggleButton x:Name="FullWord" Content="|Ab|" Margin="5 0" MinWidth="30" Height="{Binding ElementName=FullWord, Path=ActualWidth}" VerticalAlignment="Bottom"
+                  IsChecked="{Binding SearchFullWord}"></ToggleButton>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
-                MaxHeight="60"
-                Margin="0 20">
+                MaxHeight="60">
                 <Button Content="Add Article"
                     Padding="5"
                     Margin="0 0 10 0"
@@ -185,7 +289,20 @@
                     FontWeight="Bold"
                     Command="{Binding SaveArticlesCommand}"/>
             </StackPanel>
-
+            <Grid DockPanel.Dock="Top" Margin="20 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Group"></TextBlock>
+                    <TextBox Margin="-2 0" FontSize="30" Text="{Binding Path=Group, Mode=OneWay}" Background="Transparent" BorderThickness="0" TextWrapping="Wrap"></TextBox>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Address"></TextBlock>
+                    <TextBox Margin="-2 0" FontSize="30" Text="{Binding Path=Location, Mode=OneWay}" Background="Transparent" BorderThickness="0" TextWrapping="Wrap"></TextBox>
+                </StackPanel>
+            </Grid>
             <!-- Articles -->
             <ListView DockPanel.Dock="Top"
                 Name="lbShopArticles"
@@ -194,21 +311,20 @@
                 Background="Transparent"
                 VirtualizingPanel.ScrollUnit="Pixel"                
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Margin="20 0 20 0" BorderThickness="0"
+                Margin="0 20" BorderThickness="0"
                 ItemsSource="{Binding SearchedViewModels}"
-                ItemTemplate="{StaticResource ShopArticleTemplate}"
-                      >
+                ItemTemplate="{StaticResource ShopArticleTemplate}">
 
                 <ListView.Resources>
-                    <ContextMenu x:Key="ArticleContextMenu">
-                        <MenuItem Header="Delete" Command="{Binding DeleteFromArticleManageCommand}" Background="WhiteSmoke" />
+                    <ContextMenu x:Key="ShopArticleContextMenu">
+                        <MenuItem Header="Delete" Command="{Binding DeleteFromShopManageCommand}" Background="WhiteSmoke" />
                     </ContextMenu>
                 </ListView.Resources>
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="ContextMenu" Value="{StaticResource ArticleContextMenu}" />
+                        <Setter Property="ContextMenu" Value="{StaticResource ShopArticleContextMenu}" />
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>

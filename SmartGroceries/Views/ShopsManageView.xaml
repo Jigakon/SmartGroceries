@@ -14,12 +14,12 @@
                 <Border x:Name="ArticleElement"
                     HorizontalAlignment="Stretch"
                     Width="auto"
-                    Background="BlueViolet" Padding="10" Margin="0 0 0 10" CornerRadius="5">
+                    Background="{StaticResource ElementBackgroundColor}" Padding="10" Margin="0 0 0 0" CornerRadius="5">
                     <Border.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick"
                           Command="{Binding GoToShopManageCommand}"/>
                     </Border.InputBindings>
-                            <!-- Shop Body -->
+                    <!-- Shop Body -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="{Binding ElementName=ShopPicture, Path=ActualHeight}"></ColumnDefinition>
@@ -33,7 +33,7 @@
                         <!-- Shop Data Content-->
                         <StackPanel Grid.Column="1" Margin="10 0 0 0">
                             <!-- Shop Name -->
-                            <Border Background="AliceBlue" CornerRadius="5">
+                            <Border Background="{StaticResource AccentColor}" CornerRadius="5">
                                 <TextBox 
                                     Background="Transparent" 
                                     BorderThickness="0" 
@@ -48,12 +48,12 @@
                                     <ColumnDefinition Width="3*"></ColumnDefinition>
                                     <ColumnDefinition Width="2*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Background="AliceBlue" Margin="0 10 5 0" CornerRadius="5">
+                                <Border Grid.Column="0" Background="{StaticResource AccentColor}" Margin="0 10 5 0" CornerRadius="5">
                                     <TextBox Background="Transparent"
                                         BorderThickness="0"
                                         Text="{Binding Location}" FontSize="17" FontWeight="DemiBold" Margin="10 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
-                                <Border Grid.Column="1" Background="AliceBlue" Margin="0 10 0 0" CornerRadius="5">
+                                <Border Grid.Column="1" Background="{StaticResource AccentColor}" Margin="0 10 0 0" CornerRadius="5">
                                     <TextBox Background="Transparent"
                                         BorderThickness="0"
                                         Text="{Binding Group}" FontSize="17" FontWeight="DemiBold" Margin="10 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -64,10 +64,45 @@
                 </Border>
             </StackPanel>
         </DataTemplate>
-
+        <DataTemplate x:Key="ShopTemplateCompact">
+            <Border x:Name="ArticleElement"
+                    HorizontalAlignment="Stretch"
+                    Width="auto"
+                    Background="{StaticResource ElementBackgroundColor}" Padding="5" Margin="0 0 0 0" CornerRadius="5">
+                <Border.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick"
+                                  Command="{Binding GoToShopManageCommand}"/>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="{StaticResource AccentColor}" Margin="0 0 2.5 0" CornerRadius="5">
+                        <TextBox Background="Transparent" 
+                                 BorderThickness="0" 
+                                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="17" 
+                                 FontWeight="DemiBold" 
+                                 Margin="5"/>
+                    </Border>
+                    <Border Grid.Column="1" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5">
+                        <TextBox Background="Transparent"
+                                 BorderThickness="0"
+                                 Text="{Binding Location}" FontSize="12" FontWeight="DemiBold" Margin="10 0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </Border>
+                    <Border Grid.Column="2" Background="{StaticResource AccentColor}" Margin="2.5 0 0 0" CornerRadius="5">
+                        <TextBox Background="Transparent"
+                                 BorderThickness="0"
+                                 Text="{Binding Group}" FontSize="17" FontWeight="DemiBold" Margin="10 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <DockPanel Background="Transparent"
+        <DockPanel Background="Transparent" Margin="20"
             Grid.Row="0">
             <!-- Title -->
             <TextBlock 
@@ -77,15 +112,17 @@
                 FontWeight="Bold"
                 Width="auto"
                 Height="auto"
-                Margin="30,20,0,20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
+                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <TextBlock Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
+            </StackPanel>
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
-                MaxHeight="60"
-                Margin="0 20">
+                MaxHeight="60">
                 <Button Content="Add Shop"
                     Padding="5"
                     Margin="0 0 10 0"
@@ -117,20 +154,20 @@
                 Background="Transparent"
                 VirtualizingPanel.ScrollUnit="Pixel"                
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Margin="20 0 20 0" BorderThickness="0"
+                Margin="0 20" BorderThickness="0"
                 ItemsSource="{Binding SearchedViewModels}"
                 ItemTemplate="{StaticResource ShopTemplate}">
 
                 <ListView.Resources>
-                    <ContextMenu x:Key="ArticleContextMenu">
-                        <MenuItem Header="Delete" Command="{Binding DeleteFromArticleManageCommand}" Background="WhiteSmoke" />
+                    <ContextMenu x:Key="ShopContextMenu">
+                        <MenuItem Header="Delete" Command="{Binding DeleteFromShopsManageCommand}" Background="WhiteSmoke" />
                     </ContextMenu>
                 </ListView.Resources>
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="ContextMenu" Value="{StaticResource ArticleContextMenu}" />
+                        <Setter Property="ContextMenu" Value="{StaticResource ShopContextMenu}" />
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>

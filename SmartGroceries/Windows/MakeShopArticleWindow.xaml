@@ -23,7 +23,7 @@
                         UpdateSourceTrigger=PropertyChanged}"
                     Background="Transparent" 
                     BorderThickness="1" 
-                    SelectedValue="{Binding Tag}"
+                    SelectedValue="{Binding Article}"
                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Name"

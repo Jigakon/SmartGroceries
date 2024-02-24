@@ -1,4 +1,5 @@
-﻿using SmartGroceries.Models;
+﻿using SmartGroceries.Commands;
+using SmartGroceries.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ using System.Windows.Navigation;
 
 namespace SmartGroceries.ViewModels
 {
-    public class CartViewModel : ViewModelBase
+    public class CartViewModel : ViewModelData
     {
         private readonly Stores.NavigationStore _navigationStore;
 
@@ -34,13 +35,20 @@ namespace SmartGroceries.ViewModels
                 }
             }
         }
-        public string ShopName { get; set; }
-        public string ShopLocation { get; private set; }
+
+        private string _shopName;
+        public string ShopName { get => _shopName; set { _shopName = value; OnPropertyChanged(nameof(ShopName)); } }
+        private string _shopLocation;
+        public string ShopLocation { get => _shopLocation; set { _shopLocation = value; OnPropertyChanged(nameof(ShopLocation)); } }
         public ObservableCollection<ViewModels.CartArticleViewModel> CartArticles { get; set; }
 
-        public ICommand GoToCartManageCommand { get; }
+        public double totalPrice = 0.0;
+        public string TotalPrice { get => totalPrice.ToString("0.00"); }
 
-        public CartViewModel(Models.Cart cart, Stores.NavigationStore navigationStore) 
+        public ICommand GoToCartManageCommand { get; }
+        public ICommand DeleteFromManage { get; }
+
+        public CartViewModel(Models.Cart cart, ViewModels.ViewModelBase viewModelContainer, Stores.NavigationStore navigationStore) 
         {
             _navigationStore = navigationStore;
 
@@ -51,19 +59,43 @@ namespace SmartGroceries.ViewModels
             CartArticles = new ObservableCollection<CartArticleViewModel>();
             foreach(var item in cart.CartArticles)
             {
-                CartArticles.Add(new CartArticleViewModel(item));
+                totalPrice += (Shop?.GetShopArticle(item.Article.Id)?.GetClosestArticleInfo(Date)?.Price ?? 0) * item.Quantity;
+                CartArticles.Add(new CartArticleViewModel(item, viewModelContainer));
             }
+            ViewModelContainer = viewModelContainer;
             GoToCartManageCommand = new Commands.NavigateCommand(new Services.NavigationService(navigationStore, CreateCartManageViewModel));
+            DeleteFromManage = new Commands.RemoveCartCommand(this);
         }
 
-        public ViewModels.CartManageViewModel CreateCartManageViewModel()
+        public ViewModels.CartArticlesManageViewModel CreateCartManageViewModel()
         {
-            return new ViewModels.CartManageViewModel(this, new Services.NavigationService(_navigationStore, CreateCartsManageViewModel));
+            return new ViewModels.CartArticlesManageViewModel(this, new Services.NavigationService(_navigationStore, CreateCartsManageViewModel));
         }
 
         public ViewModels.CartsManageViewModel CreateCartsManageViewModel()
         {
             return new ViewModels.CartsManageViewModel(_navigationStore);
+        }
+
+        public Cart MakeCart()
+        {
+            Cart cart = new Cart(Id, Name, Date, Shop);
+            foreach (var CAVM in CartArticles)
+                cart.CartArticles.Add(new CartArticle(cart, CAVM.MakeArticle(), CAVM.Quantity, CAVM.Price));
+            return cart;
+        }
+
+        internal void Save()
+        {
+            Cart cart = GlobalDatabase.TryGetCart(Id);
+            if (cart == null)
+                cart = MakeCart();
+            else
+            {
+
+            }
+
+            GlobalDatabase.ModifyOrAddCart(cart);
         }
     }
 }

@@ -21,16 +21,9 @@ namespace SmartGroceries.Commands
         {
             switch (_tagViewModel.ViewModelContainer)
             {
-                case TagsManageViewModel tagsManageViewModel:
-                    tagsManageViewModel.RemoveTag(_tagViewModel);
-                    break;
-                case ArticleViewModel articleManageViewModel:
-                    articleManageViewModel.RemoveTag(_tagViewModel);
-                    break;
+                case ViewModelManage ViewModelManage: ViewModelManage.Remove(_tagViewModel); break;
+                case ViewModelData viewModelData: viewModelData.Remove(_tagViewModel); break;
             }
-
-            // temp : save in Json the changes
-            GlobalDatabase.SaveTagsInJSON();
         }
     }
 }

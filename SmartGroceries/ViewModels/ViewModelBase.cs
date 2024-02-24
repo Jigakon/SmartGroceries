@@ -16,4 +16,17 @@ namespace SmartGroceries.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    public interface ViewModelManage
+    {
+        void Save();
+
+        void Remove(ViewModelData viewModel);
+    }
+
+    public class ViewModelData : ViewModelBase
+    {
+        public ViewModelBase ViewModelContainer { get; set; }
+        public virtual void Remove(ViewModelData viewModel) { }
+    }
 }

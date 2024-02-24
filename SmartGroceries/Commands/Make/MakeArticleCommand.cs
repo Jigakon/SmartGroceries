@@ -8,21 +8,18 @@ using System.Threading.Tasks;
 
 namespace SmartGroceries.Commands
 {
-    public class SaveArticlesCommand : CommandBase
+    public class MakeArticleCommand : CommandBase
     {
-        private ArticlesManageViewModel _articlesManageViewModel;
+        private readonly ViewModels.ArticlesManageViewModel _articlesManageViewModel;
 
-        public SaveArticlesCommand(ArticlesManageViewModel articlesManageViewModel)
+        public MakeArticleCommand(ViewModels.ArticlesManageViewModel articlesManageViewModel)
         {
             _articlesManageViewModel = articlesManageViewModel;
         }
 
         public override void Execute(object parameter)
         {
-            _articlesManageViewModel.Save();
-
-            // temp : save in Json the changes
-            GlobalDatabase.SaveArticlesInJSON();
+            _articlesManageViewModel.AddArticle(new ViewModels.ArticleViewModel(new Article(), _articlesManageViewModel));
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using SmartGroceries.Models;
+using SmartGroceries.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +26,22 @@ namespace SmartGroceries
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ChangePaths_Button(object sender, RoutedEventArgs e)
+        {
+            new ChangePathsWindow().ShowDialog();
+            var pref = (Application.Current as App).preferences;
+            if (GlobalDatabase.SetTagPath(pref.TagsPath))
+                GlobalDatabase.LoadTagsFromJson();
+            if (GlobalDatabase.SetArticlePath(pref.ArticlesPath))
+                GlobalDatabase.LoadArticlesFromJson();
+            if(GlobalDatabase.SetShopPath(pref.ShopsPath))
+                GlobalDatabase.LoadShopsFromJson();
+            if(GlobalDatabase.SetCartPath(pref.CartsPath))
+                GlobalDatabase.LoadCartsFromJson();
+
+            pref.Save();
         }
     }
 }

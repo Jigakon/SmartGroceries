@@ -40,12 +40,12 @@ namespace SmartGroceries.Models
 
         public Cart MakeCart()
         {
-            Shop shop = GlobalDatabase.GetShop(ShopID);
+            Shop shop = GlobalDatabase.TryGetShop(ShopID);
             Cart cart = new Cart(Id, Name, Date, shop);
             List<CartArticle> articles = new List<CartArticle>();
             foreach(var cartArticle in ArticleIds)
             {
-                Article article = GlobalDatabase.GetArticle(cartArticle.ArticleID);
+                Article article = GlobalDatabase.TryGetArticle(cartArticle.ArticleID);
                 if(article != null) cart.CartArticles.Add(new CartArticle(cart, article, cartArticle.Quantity));
             }
             return cart;

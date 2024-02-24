@@ -15,12 +15,16 @@ namespace SmartGroceries.ViewModels
         public ICommand GoToManageArticlesCommand { get; }
         public ICommand GoToManageShopsCommand { get; }
         public ICommand GoToManageCartsCommand { get; }
+        public ICommand GoToCompareCommand { get; }
+        public ICommand GoToCartsInformationCommand { get; }
 
         public MainViewModel(Stores.NavigationStore navigationStore,
             Services.NavigationService TagsManageViewService,
             Services.NavigationService ArticlesManageViewService,
             Services.NavigationService ShopsManageViewService,
-            Services.NavigationService CartsManageViewService)
+            Services.NavigationService CartsManageViewService,
+            Services.NavigationService CompareViewService,
+            Services.NavigationService CartsInformationService)
         {
             _navigationStore = navigationStore;
 
@@ -28,6 +32,8 @@ namespace SmartGroceries.ViewModels
             GoToManageArticlesCommand = new Commands.NavigateCommand(ArticlesManageViewService);
             GoToManageShopsCommand = new Commands.NavigateCommand(ShopsManageViewService);
             GoToManageCartsCommand = new Commands.NavigateCommand(CartsManageViewService);
+            GoToCompareCommand = new Commands.NavigateCommand(CompareViewService);
+            GoToCartsInformationCommand = new Commands.NavigateCommand(CartsInformationService);
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

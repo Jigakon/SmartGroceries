@@ -9,21 +9,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate x:Key="TagTemplate">
-            <Border Background="{Binding Color}" CornerRadius="5" MinWidth="50" Margin="0" Height="20" VerticalAlignment="Top">
-                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
-            </Border>
-        </DataTemplate>
-
         <DataTemplate x:Key="CartArticleTemplate">
-            <Border Background="BlueViolet" Height="100" Padding="10" CornerRadius="5">
-                <Grid>
+            <Border Background="{StaticResource ElementBackgroundColor}" Height="90" Padding="2.5 5 0 5" CornerRadius="5">
+                <Grid Margin="2.5 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{Binding ElementName=ArticlePicture, Path=ActualHeight}"></ColumnDefinition>
                         <ColumnDefinition Width="*" ></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <!-- Article Picture ? -->
-                    <Rectangle x:Name="ArticlePicture" Grid.Column="0" Fill="Gray"/>
+                    <Rectangle x:Name="ArticlePicture" Grid.Column="0" Fill="Gray" RadiusX="5" RadiusY="5" Margin="0 0 2.5 0"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
@@ -34,101 +28,217 @@
                                 <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="AliceBlue" CornerRadius="5" Margin="5 0 2.5 0">
-                                <ComboBox x:Name="Article" 
-                                          Margin="5 0" 
-                                          ItemsSource="{Binding Path=cart.Shop.ShopArticles}"
-                                          Background="Transparent" 
-                                          BorderThickness="1" 
-                                          SelectedValue="{Binding selectedShopArticle}"
-                                          DisplayMemberPath="Article.Name"
-                                          Text="{Binding article.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          IsEditable="true"/>
+                            <!-- Article Name -->
+                            <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 2.5 2.5">
+                                <Grid Margin="5 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="{Binding ElementName=ChangeSelection, Path=ActualHeight}"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox x:Name="Article" Grid.Column="0"
+                                              Margin="0 0 2.5 0" 
+                                              ItemsSource="{Binding Path=SearchedSource}"
+                                              Background="Transparent" 
+                                              BorderThickness="0"
+                                              VerticalAlignment="Center"
+                                              SelectedValue="{Binding SelectedShopArticle}"
+                                              DisplayMemberPath="Article.Name"
+                                              Text="{Binding ArticleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              IsEditable="true"
+                                              FontSize="16"
+                                              FontWeight="DemiBold"
+                                              IsTextSearchEnabled="False"/>
+                                    <CheckBox x:Name="ChangeSelection" Grid.Column="1" IsChecked="{Binding ChangeSelection}" VerticalAlignment="Center"/>
+                                </Grid>
                             </Border>
-                            <Border Grid.Column="1" Background="AliceBlue" CornerRadius="5" Margin="2.5 0 2.5 0">
-                                <TextBox x:Name="ArticleBrand" Text="{Binding Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <!-- Article Brand -->
+                            <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 2.5 2.5">
+                                <TextBox x:Name="ArticleBrand" VerticalAlignment="Center" BorderThickness="0" FontSize="16" Margin="5"
+FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             </Border>
                         </Grid>
-                        <Grid Grid.Row="1" Margin="5 5 2.5 0">
+                        <Grid Grid.Row="1" Margin="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="8*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="AliceBlue" CornerRadius="5" Margin="0 0 2.5 0">
-                                <ListView Margin="5"
-                                        Height="50"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        
-                                        ItemTemplate="{StaticResource TagTemplate}"
-                                        ItemsSource="{Binding Tags}">
-                                    <ListView.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Add Tag" Command="{Binding MakeTagCommand}" Background="WhiteSmoke"/>
-                                        </ContextMenu>
-                                    </ListView.ContextMenu>
-
-                                    <!-- items context menu -->
-                                    <ListView.Resources>
-                                        <ContextMenu x:Key="ArticleTagContextMenu">
-                                            <MenuItem Header="Delete" Command="{Binding DeleteTagCommand}" Background="WhiteSmoke" />
-                                        </ContextMenu>
-                                    </ListView.Resources>
-
-                                    <ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True"/>
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>
-
-                                    <!-- Set Context menu to all items -->
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListViewItem}" >
-                                            <Setter Property="ContextMenu" Value="{StaticResource ArticleTagContextMenu}" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
+                            <!-- Article Tag -->
+                            <Border Grid.Column="0" Background="{Binding TagColor}" CornerRadius="5" Margin="2.5 2.5 2.5 0">
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                                <TextBlock Text="{Binding TagName}" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold" 
+                                           FontSize="16"/>
                             </Border>
-                            <Border Grid.Column="1" Background="AliceBlue" CornerRadius="5" Margin="2.5 0 2.5 0">
-                                <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
-                                                    Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
-                                                    Value="{Binding Price}"/>
+                            <!-- Shop/Cart Article Price for this date -->
+                            <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 2.5 2.5 0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                                    <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                                        Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="DemiBold"
+                                        Value="{Binding Price}">
+                                    </xctk:DecimalUpDown>
+                                    <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                                </StackPanel>
                             </Border>
-                            <Border Grid.Column="2" Background="AliceBlue" CornerRadius="5" Margin="2.5 0 0 0">
-                                <xctk:DecimalUpDown x:Name="ArticleQuantity" Value="{Binding Quantity}"></xctk:DecimalUpDown>
+                            <!-- Cart Article Quantity -->
+                            <Border Grid.Column="2" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 2.5 2.5 0">
+                                <xctk:DecimalUpDown x:Name="ArticleQuantity" Value="{Binding Quantity}" TextAlignment="Center" FontSize="16" FontWeight="DemiBold" ShowButtonSpinner="False" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0"></xctk:DecimalUpDown>
+                            </Border>
+                            <!-- Cart Article Total Price -->
+                            <Border Grid.Column="3" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 2.5 2.5 0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                                    <TextBlock Text="{Binding TotalPrice}" FontSize="16" FontWeight="DemiBold"/>
+                                    <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                                </StackPanel>
                             </Border>
                         </Grid>
                     </Grid>
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <DataTemplate x:Key="CartArticleTemplateCompact">
+            <Border Grid.Column="1" Background="{StaticResource ElementBackgroundColor}" Padding="5" CornerRadius="5" HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!-- Name -->                   
+                    <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="0 0 2.5 0">
+                        <Grid Margin="2.5 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="{Binding ElementName=ChangeSelection, Path=ActualHeight}"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="ArticlesComboBox" Grid.Column="0"
+                                      Margin="2.5 0" 
+                                      ItemsSource="{Binding Path=SearchedSource}"
+                                      Background="Transparent" 
+                                      BorderThickness="0"
+                                      VerticalAlignment="Center"
+                                      SelectedValue="{Binding SelectedShopArticle}"
+                                      DisplayMemberPath="Article.Name"
+                                      Text="{Binding ArticleName, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                      IsEditable="true"
+                                      
+                                      FontSize="16"
+                                      FontWeight="DemiBold">
+                            </ComboBox>
+                            <CheckBox x:Name="ChangeSelection" Grid.Column="1" IsChecked="{Binding ChangeSelection}" VerticalAlignment="Center" Margin="0 0 0 0"/>
+                        </Grid>
+                    </Border>
+                    <!-- Brand -->
+                    <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
+                        <TextBox x:Name="ArticleBrand" Margin="5 0" FontWeight="DemiBold" FontSize="16" VerticalAlignment="Center" BorderThickness="0" Background="{StaticResource AccentColor}" Text="{Binding Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Border>
+                    <!-- Tag -->
+                    <Border Grid.Column="2" Background="{Binding TagColor}" CornerRadius="5" Margin="2.5 0" IsEnabled="{Binding IsNotNew}">
+                        <Border.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
+                            </ContextMenu>
+                        </Border.ContextMenu>
+                        <TextBlock Text="{Binding TagName}" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center" 
+                                       FontWeight="SemiBold" 
+                                       FontSize="16"/>
+                    </Border>
+                    <!-- unit (kg / l / piece) -->
+                    <Border Grid.Column="3" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
+                        <DockPanel VerticalAlignment="Center" Margin="10 0">
+
+                            <TextBlock DockPanel.Dock="Right" x:Name="ArticleUnit" VerticalAlignment="Center"
+                                           Background="Transparent"
+                                           Text="{Binding UnitText}" 
+                                           FontSize="20" 
+                                           FontWeight="DemiBold" 
+                                           Margin="5">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu >
+                                        <MenuItem Header="Weight" Command="{Binding SetWeightCommand}"/>
+                                        <MenuItem Header="Volume" Command="{Binding SetVolumeCommand}"/>
+                                        <MenuItem Header="Piece" Command="{Binding SetPieceCommand}"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsUnitFixed}" VerticalAlignment="Center" FontSize="50" ToolTip="Is Unit Fixed">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <Rectangle Fill="{StaticResource ElementBackgroundColor}" Margin="10 5" DockPanel.Dock="Left" Width="5" Height="auto" RadiusX="2.5" RadiusY="2.5"></Rectangle>
+                            <xctk:DecimalUpDown DockPanel.Dock="Right" IsEnabled="{Binding Path=IsNotUnitFixed}" Value="{Binding UnitQuantity}" HorizontalAlignment="Stretch" ShowButtonSpinner="False" Minimum="0" Increment="0.1" BorderThickness="0" Background="Transparent" FontSize="20" FontWeight="DemiBold"/>
+                        </DockPanel>
+                    </Border>
+                    <!-- Price -->
+                    <Border Grid.Column="4" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                            <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                                                    Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="DemiBold"
+                                                    Value="{Binding Price}">
+                            </xctk:DecimalUpDown>
+                            <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Quantity -->
+                    <Border Grid.Column="5" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
+                        <xctk:DecimalUpDown x:Name="ArticleQuantity" Value="{Binding Quantity}" TextAlignment="Center" FontSize="16" FontWeight="DemiBold" ShowButtonSpinner="False" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0"></xctk:DecimalUpDown>
+                    </Border>
+                    <!-- Price / unit -->
+                    <Border Grid.Column="6" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                            <TextBlock Text="{Binding TotalPrice}" FontSize="16" FontWeight="DemiBold"/>
+                            <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
+
     <Grid>
-        <DockPanel Grid.Row="0" Background="Transparent">
+        <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Border Margin="10 0"  Background="red" Height="30" Width="30" CornerRadius="15">
+                <Border Margin="10 0"  Background="Red" Height="30" Width="30" CornerRadius="15">
                     <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageCartsCommand}">
                         <TextBlock Padding="0 0 0 5" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     </Button>
                 </Border>
                 <!-- Title -->
                 <TextBlock DockPanel.Dock="Top"
-                    FontSize="30"
-                    FontWeight="Bold"
-                    Width="auto"
-                    Height="auto"
-                    Margin="30,20,0,20" HorizontalAlignment="Left" VerticalAlignment="Top">
+                           FontSize="30"
+                           FontWeight="Bold"
+                           Width="auto"
+                           Height="auto"
+                           Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run>Cart : </Run>
-                    <Run Text="{Binding Path=Name, Mode=OneWay}" FontWeight="Bold" />
+                    <Run Text="{Binding Path=CartName, Mode=OneWay}" FontWeight="Bold" />
                 </TextBlock>
 
             </StackPanel>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <DatePicker Width="200" HorizontalAlignment="Left" Margin="10 0 0 0"
-                            SelectedDate="{Binding Path=Date, Mode=TwoWay}"></DatePicker>
-                <ComboBox Width="200" HorizontalAlignment="Left" Margin="10 0 0 0"
-                          x:Name="ShopCart" VerticalAlignment="Center" BorderThickness="0" Background="AliceBlue" BorderBrush="AliceBlue"
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10 20 10 10">
+                <TextBlock Text="Compact mode" Margin="5 0"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" Margin="5 0"/>
+            </StackPanel>
+            <DockPanel DockPanel.Dock="Top" Margin="10">
+                <DatePicker DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left" Margin="0 0 0 0"
+                            SelectedDate="{Binding Path=Date, Mode=TwoWay}" BorderThickness="0" VerticalAlignment="Center"></DatePicker>
+                <ComboBox DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left" Margin="0 0 0 0"
+                          x:Name="ShopCart" VerticalAlignment="Center" BorderThickness="0" Background="{StaticResource AccentColor}" BorderBrush="{StaticResource AccentColor}"
                           ItemsSource="{Binding Source={x:Static models:GlobalDatabase.Instance},
                             Path=Shops,
                             UpdateSourceTrigger=PropertyChanged}"
@@ -136,51 +246,59 @@
                           DisplayMemberPath="Name"
                           Text="{Binding Shop.Name}"
                           SelectionChanged="ShopCart_SelectionChanged"></ComboBox>
-            </StackPanel>
+                <Border DockPanel.Dock="Right" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0" HorizontalAlignment="Right" MaxWidth="200">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                        <TextBlock Text="{Binding TotalPrice, Mode=OneWay}" FontSize="20" FontWeight="DemiBold"/>
+                        <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
             <StackPanel DockPanel.Dock="Bottom"
-                Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                MinHeight="20"
-                MaxHeight="60"
-                Margin="0 20">
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        MinHeight="20"
+                        MaxHeight="60"
+                        Margin="0 20">
+                
                 <Button Content="Add Article"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding AddCartArticleCommand}"/>
+                        Padding="5"
+                        Margin="0 0 10 0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"  
+                        Background="#FFD21414" 
+                        Foreground="#FFDCCDCD" 
+                        BorderThickness="0,0,0,0" 
+                        FontWeight="Bold"
+                        Command="{Binding AddCartArticleCommand}"/>
 
                 <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding SaveCartArticlesCommand}"/>
+                        Padding="5"
+                        Margin="10 0 0 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"    
+                        Background="#FFD21414" 
+                        Foreground="#FFDCCDCD" 
+                        BorderThickness="0,0,0,0" 
+                        FontWeight="Bold"
+                        Command="{Binding SaveCartArticlesCommand}"/>
             </StackPanel>
+
             <!-- Articles -->
             <ListView DockPanel.Dock="Top"
-                Name="lbShopArticles"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Background="Transparent"
-                VirtualizingPanel.ScrollUnit="Pixel"                
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Margin="20 0 20 0" BorderThickness="0"
-                ItemsSource="{Binding SearchedViewModels}"
-                ItemTemplate="{StaticResource CartArticleTemplate}">
+                      Name="lbCartArticles"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent"
+                      VirtualizingPanel.ScrollUnit="Pixel"                
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Margin="5 20 20 0" BorderThickness="0"
+                      ItemsSource="{Binding SearchedViewModels}"
+                      ItemTemplate="{StaticResource CartArticleTemplate}">
 
                 <ListView.Resources>
                     <ContextMenu x:Key="ArticleContextMenu">
-                        <MenuItem Header="Delete" Command="{Binding DeleteFromArticleManageCommand}" Background="WhiteSmoke" />
+                        <MenuItem Header="Delete" Command="{Binding DeleteFromManage}" Background="WhiteSmoke" />
                     </ContextMenu>
                 </ListView.Resources>
 

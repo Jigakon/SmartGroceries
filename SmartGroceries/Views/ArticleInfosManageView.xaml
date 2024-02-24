@@ -5,33 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartGroceries.Views"
              xmlns:vms="clr-namespace:SmartGroceries.ViewModels"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <DataTemplate x:Key="ArticleInfoTemplate">
-            <Border Background="BlueViolet" CornerRadius="5" MinWidth="50" Margin="0" Height="50" VerticalAlignment="Top">
-                <Grid Margin="5">
+            <Border Background="{StaticResource ElementBackgroundColor}" CornerRadius="5" MinWidth="50" Margin="0" VerticalAlignment="Top" Padding="2.5">
+                <Grid Margin="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Background="AliceBlue" CornerRadius="5" MaxHeight="30" Margin="20 0 10 0">
-                        <DatePicker x:Name="_DatePicker" VerticalAlignment="Center" BorderThickness="0" Margin="10 0"
+                    <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" MaxHeight="30" Margin="2.5">
+                        <DatePicker x:Name="_DatePicker" VerticalAlignment="Center" BorderThickness="0" Margin="2.5 0" FontSize="16" FontWeight="DemiBold"
                                     SelectedDate="{Binding Path=Date, Mode=TwoWay}" Background="Transparent"/>
                     </Border>
-                    <Border Grid.Column="1" Background="AliceBlue" CornerRadius="5" MaxHeight="30" Margin="10 0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
-                            <xctk:DecimalUpDown x:Name="_Price" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                    <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" MaxHeight="30" Margin="2.5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                            <xctk:DecimalUpDown x:Name="_Price" Minimum="0" ShowButtonSpinner="False"
                                         Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
                                         Value="{Binding Price}"/>
                             <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
                         </StackPanel>
                     </Border>
-                    <Border Grid.Column="2" Background="AliceBlue" CornerRadius="5" MaxHeight="30" Margin="10 0 20 0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
-                            <xctk:DecimalUpDown x:Name="_UnitQuantity" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                    <Border Grid.Column="2" Background="{StaticResource AccentColor}" CornerRadius="5" MaxHeight="30" Margin="2.5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                            <xctk:DecimalUpDown x:Name="_UnitQuantity" Minimum="0" ShowButtonSpinner="False"
                                         Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
                                         Value="{Binding UnitQuantity}"/>
                             <TextBlock Text="{Binding Path=DataContext.shopArticleViewModel.UnitText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"
@@ -42,24 +43,28 @@
             </Border>
         </DataTemplate>
     </UserControl.Resources>
+    
     <Grid>
-        <DockPanel Background="Transparent"
+        <DockPanel Background="Transparent" Margin="20"
            Grid.Row="0">
             <StackPanel DockPanel.Dock="Top"
                 Orientation="Horizontal">
-                <Border Margin="10 0"  Background="red" Height="30" Width="30" CornerRadius="15">
+                <Border Background="red" Height="30" Width="30" CornerRadius="15">
                     <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageShopCommand}">
                         <TextBlock Padding="0 0 0 5" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     </Button>
                 </Border>
                 <!-- Title -->
                 <TextBlock DockPanel.Dock="Top"
-                Text="Article Infos"
-                FontSize="30"
-                FontWeight="Bold"
-                Width="auto"
-                Height="auto"
-                Margin="30,20,0,20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    FontSize="30"
+                    FontWeight="Bold"
+                    Width="auto"
+                    Height="auto"
+                    Margin="30,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Run Text="{Binding ShopName, Mode=OneTime}"></Run>
+                    <Run Text=" : "></Run>
+                    <Run Text="{Binding ArticleName, Mode=OneTime}"></Run>
+                </TextBlock>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Bottom"
@@ -67,8 +72,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
-                MaxHeight="60"
-                Margin="0 20">
+                MaxHeight="60">
                 <Button Content="Add Article Info"
                     Padding="5"
                     Margin="0 0 10 0"
@@ -91,7 +95,11 @@
                     FontWeight="Bold"
                     Command="{Binding SaveArticleInfosCommand}"/>
             </StackPanel>
-
+            <lvc:CartesianChart DockPanel.Dock="Bottom" x:Name="CartesianChart" Series="{Binding Prices}" MinHeight="300" VerticalAlignment="Stretch">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis LabelFormatter="{Binding FormatterDate}"></lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
             <!-- Articles -->
             <ListView DockPanel.Dock="Top"
                 Name="lbArticles"

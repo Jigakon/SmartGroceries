@@ -25,7 +25,7 @@ namespace SmartGroceries.Models
 
         public CartArticle MakeCartArticle(Cart cart)
         {
-            Article article = GlobalDatabase.GetArticle(ArticleID);
+            Article article = GlobalDatabase.TryGetArticle(ArticleID);
             return new CartArticle(cart, article, Quantity);
         }
     }

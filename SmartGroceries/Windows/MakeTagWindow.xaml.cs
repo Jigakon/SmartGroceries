@@ -2,6 +2,7 @@
 using SmartGroceries.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,39 +20,94 @@ namespace SmartGroceries.Windows
     /// <summary>
     /// Logique d'interaction pour MakeTagWindow.xaml
     /// </summary>
+
+    // Big Mess, try to find a way to abstract or 
     public partial class MakeTagWindow : Window
     {
         private TagViewModel _tagViewModel;
+        private ViewModelManage _manageViewModel;
+        private ObservableCollection<Tag> ExistingTags;
 
-        public MakeTagWindow(ViewModelBase containerViewModel)
+        public string TagName
+        {
+            get => _tagViewModel.Name;
+            set => _tagViewModel.Name = value;
+        }
+        public string TagColor
+        {
+            get => _tagViewModel.Color;
+            set => _tagViewModel.Color = value;
+        }
+
+        public MakeTagWindow(ViewModelBase ContainerViewModel)
         {
             InitializeComponent();
 
-            _tagViewModel = new TagViewModel(new Tag("MyNewTag", "#FF0000FF"));
-            _tagViewModel.ViewModelContainer = containerViewModel;
+            _tagViewModel = new TagViewModel(new Tag("New Tag", "#FFF0F0F0"));
+            _tagViewModel.ViewModelContainer = ContainerViewModel;
+            switch (ContainerViewModel)
+            {
+                case CartArticleViewModel CAVM:
+                    if (CAVM.ViewModelContainer is CartArticlesManageViewModel CAMVM)
+                    {
+                        _manageViewModel = CAMVM;
+                        ExistingTags = new ObservableCollection<Tag>(CAMVM.UsableTags);
+                    }
+                    _TagLabelComboBox.Text = TagName;
+                    _TagLabelComboBox.Visibility = Visibility.Visible;
+                    _TagLabelTextBox.Visibility = Visibility.Collapsed;
+                    break;
+
+                case ArticleViewModel AVM:
+                    if (AVM.ViewModelContainer is ArticlesManageViewModel b)
+                    {
+                        _manageViewModel = b;
+                        ExistingTags = new ObservableCollection<Tag>(b.UsableTags);
+                    }
+                    _TagLabelComboBox.Text = TagName;
+                    _TagLabelComboBox.Visibility = Visibility.Visible;
+                    _TagLabelTextBox.Visibility = Visibility.Collapsed;
+                    break;
+
+                case TagsManageViewModel TMVM:
+                    _TagLabelTextBox.Text = TagName;
+                    _TagLabelComboBox.Visibility = Visibility.Collapsed;
+                    _TagLabelTextBox.Visibility = Visibility.Visible;
+                    _manageViewModel = TMVM;
+                    ExistingTags = new ObservableCollection<Tag>();
+                    break;
+            }
+            _TagLabelComboBox.ItemsSource = ExistingTags;
         }
 
-        private void AddTagButton_Click(object sender, RoutedEventArgs e)
+        private void SetTagButton_Click(object sender, RoutedEventArgs e)
         {
-            _tagViewModel.Color = _ColorPicker.SelectedColor.ToString();
-            _tagViewModel.Name = _TagLabel.Text;
+            if (TagName == "") Close();
 
-            var tagSearch = GlobalDatabase.TryGetTag(_tagViewModel.Name, _tagViewModel.Color);
-            // if the id of the new tag already exists
+            var tagSearch = GlobalDatabase.TryGetTag(TagName, TagColor);
             if (tagSearch != null)
             {
                 _tagViewModel.Id = tagSearch.Id;
-                _tagViewModel.Name = tagSearch.Name;
-                _tagViewModel.Color = tagSearch.Color;
+                TagName = tagSearch.Name;
+                TagColor = tagSearch.Color;
             }
-            else
+
+            switch (_manageViewModel)
             {
-                // temporary : save tags when we save Articles
-                // ignore new tags if we don't save ?
-                GlobalDatabase.TryAddTag(new Tag(_tagViewModel.Id, _tagViewModel.Name, _tagViewModel.Color));
-                GlobalDatabase.SaveTagsInJSON();
+                case CartArticlesManageViewModel CAMVM:
+                    (_tagViewModel.ViewModelContainer as CartArticleViewModel)?.SetTag(_tagViewModel);
+                    CAMVM.TryAddTag(_tagViewModel);
+                    break;
+
+                case ArticlesManageViewModel AMVM:
+                    (_tagViewModel.ViewModelContainer as ArticleViewModel)?.SetTag(_tagViewModel);
+                    AMVM.TryAddTag(_tagViewModel);
+                    break;
+
+                case TagsManageViewModel TMVM:
+                    TMVM.AddTag(_tagViewModel);
+                    break;
             }
-            (_tagViewModel.ViewModelContainer as ArticleViewModel).AddTag(_tagViewModel);
 
             Close();
         }
@@ -60,14 +116,30 @@ namespace SmartGroceries.Windows
             Close();
         }
 
+
+
         private void _TagLabel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_TagLabel.SelectedItem != null)
+            if (_TagLabelComboBox.SelectedItem != null)
             {
-                var tagSearch = GlobalDatabase.TryGetTag((_TagLabel.SelectedItem as Tag).Id);
-                if (tagSearch != null)
-                    _ColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(tagSearch.Color);
+                TagColor = (_TagLabelComboBox.SelectedItem as Tag).Color;
+                _ColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(TagColor);
             }
+        }
+
+
+        private void _TagLabelTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            switch (sender)
+            {
+                case TextBox obj: TagName = obj.Text; break;
+                case ComboBox obj: TagName = obj.Text; break;
+            }
+        }
+
+        private void _ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            TagColor = _ColorPicker.SelectedColor.ToString();
         }
     }
 }

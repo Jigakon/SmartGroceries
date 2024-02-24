@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace SmartGroceries.ViewModels
 {
-    public class ArticleInfoViewModel : ViewModelBase
+    public class ArticleInfoViewModel : ViewModelData
     {
         private DateTime _date;
         public DateTime Date { get => _date; 
@@ -20,16 +20,16 @@ namespace SmartGroceries.ViewModels
                 (ViewModelContainer as ViewModels.ArticleInfosManageViewModel)?.Sort();
             }
         }
-        public float Price { get; set; }
+        public float _price;
+        public float Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); } }
         /// <summary>
         /// in what unit quantity the Article is selled : weight (kg), volume (l) or piece.
         /// Examples : Water 1l, Chicken 1.5kg... 
         /// </summary>
-        public float UnitQuantity { get; set; }
+        private float _unitQuantity;
+        public float UnitQuantity { get => _unitQuantity; set { _unitQuantity = value; OnPropertyChanged(nameof(UnitQuantity)); } }
 
         public ICommand DeleteArticleInfoCommand { get; }
-        public ViewModels.ViewModelBase ViewModelContainer { get; set; }
-
         public ArticleInfoViewModel(Models.ArticleInfo articleInfo, ViewModels.ViewModelBase _viewModelContainer) 
         { 
             Date = articleInfo.Date;

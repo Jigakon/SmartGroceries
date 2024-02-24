@@ -21,64 +21,58 @@ namespace SmartGroceries.Windows
     /// </summary>
     public partial class MakeShopArticleWindow : Window
     {
-        private readonly ShopManageViewModel _viewModel;
-        private ShopArticle _shopArticle;
-
-        public MakeShopArticleWindow(ShopManageViewModel shopManageViewModel)
+        private readonly ShopArticlesManageViewModel _viewModel;
+        private Shop _shop;
+        public MakeShopArticleWindow(ShopArticlesManageViewModel shopManageViewModel)
         {
             InitializeComponent();
 
             _viewModel = shopManageViewModel;
-            Shop shop = GlobalDatabase.GetShop(shopManageViewModel.ShopViewModel.Id);
-            if (shop == null)
-                shop = shopManageViewModel.MakeShop();
-            _shopArticle = new ShopArticle(shop, new Article(), new List<ArticleInfo>());
-
+            _shop = GlobalDatabase.TryGetShop(shopManageViewModel.Id) ?? shopManageViewModel.MakeShop();
+            
             _ArticleUnit.SelectedItem = Unit.Weight;
-            _shopArticle.ArticleUnit = Unit.Weight;
         }
 
         private void _ArticleName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var article = (_ArticleName.SelectedItem as Models.Article);
-            if (article == null)
-                return;
-            _ArticleBrand.Text = article.Brand;
-            _shopArticle.Article = article;
+            if (article != null)
+                _ArticleBrand.Text = article.Brand;
         }
 
         private void _ArticleUnit_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Models.Unit? unit = (_ArticleUnit.SelectedItem as Models.Unit?);
-            if (unit != null) 
-                _shopArticle.ArticleUnit = (Models.Unit)unit;
         }
 
         private void _ArticleBrand_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _shopArticle.Article.Brand = _ArticleBrand.Text;
+
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!string.IsNullOrEmpty(_ArticleName.Text))
+            {
             // Search if this new article already exists in the database, based on it's name and brand
-            Article article = GlobalDatabase.GetArticle(_shopArticle.Article.Name, _shopArticle.Article.Brand);
-            if (article != null)
-                _shopArticle.Article = article;
-            else
-                _shopArticle.Article.Id = Guid.NewGuid();
-            _viewModel.AddShopArticle(_shopArticle);
+                Article article = GlobalDatabase.TryGetArticle(_ArticleName.Text, _ArticleBrand.Text);
+                if (article == null)
+                    article = new Article(_ArticleName.Text, _ArticleBrand.Text);
+
+                ShopArticle shopArticle = _shop.GetShopArticle(article.Id);
+                if (shopArticle == null)
+                {
+                    Unit unit = _ArticleUnit.SelectedItem as Unit? ?? Unit.Weight;
+                    shopArticle = new ShopArticle(_shop, article, new List<ArticleInfo>(), unit);
+                    _viewModel.AddShopArticle(shopArticle);
+                }
+            }
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void _ArticleName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _shopArticle.Article.Name = _ArticleName.Text;
         }
     }
 }

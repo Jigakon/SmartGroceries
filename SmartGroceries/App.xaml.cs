@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace SmartGroceries
 {
@@ -17,20 +18,25 @@ namespace SmartGroceries
     /// </summary>
     public partial class App : Application
     {
+        public static string GetColorAsString(string key) => (App.Current.FindResource("AccentColor") as SolidColorBrush)?.Color.ToString() ?? "FFFFFF";
+
         private readonly NavigationStore _navigationStore;
         public App()
         {
             _navigationStore = new NavigationStore();
         }
-
+        public ApplicationPreferences preferences;
         protected override void OnStartup(StartupEventArgs e)
         {
             string _projectDir = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? string.Empty;
 
-            GlobalDatabase.SetTagPath(_projectDir + @"\SmartGroceries\tags.json");
-            GlobalDatabase.SetArticlePath(_projectDir + @"\SmartGroceries\articles.json");
-            GlobalDatabase.SetShopPath(_projectDir + @"\SmartGroceries\shops.json");
-            GlobalDatabase.SetCartPath(_projectDir + @"\SmartGroceries\carts.json");
+            preferences = new ApplicationPreferences();
+            preferences.Load();
+
+            GlobalDatabase.SetTagPath(preferences.TagsPath);
+            GlobalDatabase.SetArticlePath(preferences.ArticlesPath);
+            GlobalDatabase.SetShopPath(preferences.ShopsPath);
+            GlobalDatabase.SetCartPath(preferences.CartsPath);
 
             GlobalDatabase.LoadTagsFromJson();
             GlobalDatabase.LoadArticlesFromJson();
@@ -45,7 +51,9 @@ namespace SmartGroceries
                     new Services.NavigationService(_navigationStore, CreateTagsManageViewModel),
                     new Services.NavigationService(_navigationStore, CreateArticlesManageViewModel),
                     new Services.NavigationService(_navigationStore, CreateShopsManageViewModel),
-                    new Services.NavigationService(_navigationStore, CreateCartsManageViewModel))
+                    new Services.NavigationService(_navigationStore, CreateCartsManageViewModel),
+                    new Services.NavigationService(_navigationStore, CreateCompareViewModel),
+                    new Services.NavigationService(_navigationStore, CreateCartsInformationsViewModel))
             };
             MainWindow.Show();
 
@@ -70,6 +78,28 @@ namespace SmartGroceries
         private CartsManageViewModel CreateCartsManageViewModel()
         {
             return new CartsManageViewModel(_navigationStore);
+        }
+        private CompareShopArticleViewModel CreateCompareViewModel()
+        {
+            return new CompareShopArticleViewModel();
+        }
+
+        private CartInfomationsViewModel CreateCartsInformationsViewModel()
+        {
+            return new CartInfomationsViewModel();
+        }
+
+        protected override void OnExit(System.Windows.ExitEventArgs e)
+        {
+            GlobalDatabase.SaveTagsInJSON();
+            GlobalDatabase.SaveArticlesInJSON();
+            GlobalDatabase.SaveShopsInJSON();
+            GlobalDatabase.SaveCartsInJSON();
+        }
+
+        public bool IsAmbientPropertyAvailable(string propertyName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
