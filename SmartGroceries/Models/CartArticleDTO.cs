@@ -10,6 +10,7 @@ namespace SmartGroceries.Models
     {
         public Guid ArticleID { get; set; }
         public uint Quantity { get; set; }
+        public float UnitQuantity { get; set; }
 
         public CartArticleDTO()
         {
@@ -21,6 +22,7 @@ namespace SmartGroceries.Models
         {
             ArticleID = cartArticle.Article.Id;
             Quantity = cartArticle.Quantity;
+            UnitQuantity = cartArticle.UnitQuantity;
         }
 
         public CartArticle MakeCartArticle(Cart cart)

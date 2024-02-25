@@ -107,6 +107,7 @@
         <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock DockPanel.Dock="Top"
+                Foreground="{StaticResource LightText}"
                 Text="Carts"
                 FontSize="30"
                 FontWeight="Bold"
@@ -114,7 +115,7 @@
                 Height="auto"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
+                <TextBlock Text="Compact Mode" Margin="0 0 10 0" Foreground="{StaticResource LightText}"></TextBlock>
                 <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom"
@@ -128,8 +129,8 @@
                     Margin="0 0 10 0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"  
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}"
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding MakeCartCommand}"/>
@@ -139,8 +140,8 @@
                     Margin="10 0 0 0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"    
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}"
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding SaveCartsCommand}"/>

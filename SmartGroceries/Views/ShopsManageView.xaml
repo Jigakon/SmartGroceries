@@ -106,6 +106,7 @@
             Grid.Row="0">
             <!-- Title -->
             <TextBlock 
+                Foreground="{StaticResource LightText}"
                 DockPanel.Dock="Top"
                 Text="Shops"
                 FontSize="30"
@@ -114,7 +115,7 @@
                 Height="auto"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
+                <TextBlock Foreground="{StaticResource LightText}" Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
                 <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom"
@@ -128,8 +129,8 @@
                     Margin="0 0 10 0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"  
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}"
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding MakeShopCommand}"/>
@@ -139,8 +140,8 @@
                     Margin="10 0 0 0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"    
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}" 
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding SaveShopsCommand}"/>

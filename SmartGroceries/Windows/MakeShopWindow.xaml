@@ -5,25 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartGroceries.Windows"
         mc:Ignorable="d"
-        Title="MakeShopWindow" Height="275" Width="400" ResizeMode="NoResize">
+        Title="Make Shop" Height="275" Width="400" ResizeMode="NoResize"
+        Background="{StaticResource BackgroundMain}">
     <DockPanel Margin="20">
-        <TextBlock DockPanel.Dock="Top" Text="Make a New Shop" FontWeight="Bold" FontSize="20" Margin="0 0 0 5"></TextBlock>
+        <TextBlock DockPanel.Dock="Top" Text="Make a New Shop" FontWeight="Bold" FontSize="20" Margin="0 0 0 5" Foreground="{StaticResource LightText}"></TextBlock>
         <StackPanel DockPanel.Dock="Top" Margin="0 5">
-            <TextBlock Text="Name"/>
+            <TextBlock Text="Name" Foreground="{StaticResource LightText}"/>
             <TextBox x:Name="NameTextBox"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0 5">
-            <TextBlock Text="Group"/>
+            <TextBlock Text="Group" Foreground="{StaticResource LightText}"/>
             <TextBox x:Name="GroupTextBox"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0 5">
-            <TextBlock Text="Address"/>
+            <TextBlock Text="Address" Foreground="{StaticResource LightText}"/>
             <TextBox x:Name="AddressTextBox"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Button Content="Create Shop" Background="#FFD21414" Foreground="#FFDCCDCD" FontWeight="DemiBold" Padding="2.5" Margin="5 0"
+            <Button Content="Create Shop" Background="#FFD21414" Foreground="#FFDCCDCD" FontWeight="DemiBold" Padding="2.5" Margin="5 0" BorderThickness="0"
                     Click="MakeShop_Button"/>
-            <Button Content="Cancel" Background="#FFD21414" Foreground="#FFDCCDCD" FontWeight="DemiBold" Padding="2.5" Margin="5 0"
+            <Button Content="Cancel" Background="#FFD21414" Foreground="#FFDCCDCD" FontWeight="DemiBold" Padding="2.5" Margin="5 0" BorderThickness="0"
                     Click="Cancel_Button"/>
         </StackPanel>
     </DockPanel>

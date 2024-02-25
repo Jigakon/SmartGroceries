@@ -7,12 +7,12 @@
         xmlns:models="clr-namespace:SmartGroceries.Models"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MakeTagWindow" Height="200" Width="200">
-    <DockPanel>
+        Title="Make Tag" Height="200" Width="200">
+    <DockPanel Background="{StaticResource BackgroundMain}">
         <StackPanel
                 Margin="20 10 20 0"
                 DockPanel.Dock="Top">
-            <TextBlock Text="Name"/>
+            <TextBlock Text="Name" Foreground="{StaticResource LightText}"/>
             <ComboBox x:Name="_TagLabelComboBox"
                     Background="Transparent" 
                     BorderThickness="0" 
@@ -26,7 +26,7 @@
         </StackPanel>
 
         <StackPanel DockPanel.Dock="Top" Margin="20 10 20 0">
-            <TextBlock Text="Color"/>
+            <TextBlock Text="Color" Foreground="{StaticResource LightText}"/>
             <xctk:ColorPicker x:Name="_ColorPicker" SelectedColorChanged="_ColorPicker_SelectedColorChanged"/>
         </StackPanel>
 
@@ -37,8 +37,8 @@
                 VerticalAlignment="Bottom"
                 MaxHeight="20"
                 Margin="20">
-            <Button Content="Apply" Click="SetTagButton_Click" Margin="10 0" Padding="10 0"></Button>
-            <Button Content="Cancel" Click="CancelButton_Click" Padding="10 0"></Button>
+            <Button Content="Apply" Click="SetTagButton_Click" Margin="10 0" Padding="10 0" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
+            <Button Content="Cancel" Click="CancelButton_Click" Padding="10 0" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
         </StackPanel>
     </DockPanel>
 </Window>

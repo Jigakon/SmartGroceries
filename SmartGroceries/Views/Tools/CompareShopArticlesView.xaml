@@ -12,6 +12,7 @@
         <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock DockPanel.Dock="Top"
+                       Foreground="{StaticResource LightText}"
                 Text="Compare Articles"
                 FontSize="30"
                 FontWeight="Bold"/>
@@ -23,7 +24,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel x:Name="Selector0" Grid.Column="0" Margin="10 0">
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Shop"></TextBlock>
+                        <TextBlock Text="Shop" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -40,7 +41,7 @@
                         </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Article"></TextBlock>
+                        <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -60,7 +61,7 @@
                 </StackPanel>
                 <StackPanel x:Name="Selector1" Grid.Column="1" Margin="10 0">
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Shop"></TextBlock>
+                        <TextBlock Text="Shop" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -77,7 +78,7 @@
                         </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Article"></TextBlock>
+                        <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -97,7 +98,7 @@
                 </StackPanel>
                 <StackPanel x:Name="Selector2" Grid.Column="2" Margin="10 0">
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Shop"></TextBlock>
+                        <TextBlock Text="Shop" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -114,7 +115,7 @@
                         </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
-                        <TextBlock Text="Article"></TextBlock>
+                        <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -133,7 +134,7 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            <lvc:CartesianChart x:Name="CartesianChart" DockPanel.Dock="Bottom" LegendLocation="Bottom" Margin="10" Series="{Binding Prices}">
+            <lvc:CartesianChart x:Name="CartesianChart" DockPanel.Dock="Bottom" Foreground="{StaticResource LightText}" LegendLocation="Bottom" Margin="10" Series="{Binding Prices}">
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis LabelFormatter="{Binding FormatterDate}"
                               MinValue="{Binding MinDate, Mode=TwoWay}"

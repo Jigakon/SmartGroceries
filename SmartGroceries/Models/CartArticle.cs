@@ -12,13 +12,16 @@ namespace SmartGroceries.Models
         public Article Article { get; set; }
         public uint Quantity { get; set; }
         public float Price { get; set; }
+        public float UnitQuantity { get; set; }
 
-        public CartArticle(Cart cart, Article article = null, uint quantity = 1, float price = 0f) 
+
+        public CartArticle(Cart cart, Article article = null, uint quantity = 1, float price = 0f, float unitQuantity = 0f) 
         {
             Cart = cart;
             Article = article ?? new Article();
             Quantity = quantity;
             Price = price;
+            UnitQuantity = unitQuantity;
         }
     }
 }

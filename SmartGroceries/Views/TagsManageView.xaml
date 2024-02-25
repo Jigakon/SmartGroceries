@@ -17,6 +17,7 @@
         <DockPanel Background="Transparent" Margin="20" HorizontalAlignment="Stretch">
             <!-- Title -->
             <TextBlock 
+                Foreground="{StaticResource LightText}"
                 DockPanel.Dock="Top"
                 Text="Tags"
                 FontSize="30"
@@ -36,8 +37,8 @@
                     Margin="0 0 10 0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"  
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}" 
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding MakeTagCommand}"/>
@@ -47,8 +48,8 @@
                     Margin="10 0 0 0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"    
-                    Background="#FFD21414" 
-                    Foreground="#FFDCCDCD" 
+                    Background="{StaticResource ButtonMain}"
+                    Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
                     Command="{Binding SaveTagsCommand}"/>

@@ -8,15 +8,16 @@
         xmlns:models="clr-namespace:SmartGroceries.Models"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MakeShopArticleWindow" Height="300" Width="400">
+        Title="Make Shop Article" Height="300" Width="400"
+        Background="{StaticResource BackgroundMain}">
     <Grid>
         <DockPanel>
             <TextBlock DockPanel.Dock="Top" Margin="20 10 20 0" Text="{Binding Shop.Name}" FontWeight="Bold"/>
             <StackPanel
                 Margin="20 10 20 0"
                 DockPanel.Dock="Top">
-                
-                <TextBlock Text="Name"/>
+
+                <TextBlock Text="Name" Foreground="{StaticResource LightText}"/>
                 <ComboBox x:Name="_ArticleName"
                     ItemsSource="{Binding Source={x:Static models:GlobalDatabase.Instance}, 
                         Path=Articles,
@@ -33,7 +34,7 @@
             <StackPanel
                 Margin="20 10 20 0"
                 DockPanel.Dock="Top">
-                <TextBlock Text="Brand"/>
+                <TextBlock Text="Brand" Foreground="{StaticResource LightText}"/>
                 <TextBox x:Name="_ArticleBrand"
                          TextChanged="_ArticleBrand_TextChanged"/>
             </StackPanel>
@@ -41,7 +42,7 @@
             <StackPanel
                 Margin="20 10 20 0"
                 DockPanel.Dock="Top">
-                <TextBlock Text="Unit"/>
+                <TextBlock Text="Unit" Foreground="{StaticResource LightText}"/>
                 <ComboBox x:Name="_ArticleUnit"
                     Background="Transparent" 
                     ItemsSource="{Binding Source={project:EnumBindingSourceExtension {x:Type models:Unit}}}"
@@ -54,8 +55,8 @@
                 VerticalAlignment="Bottom"
                 MaxHeight="20"
                 Margin="20">
-                <Button Content="Apply" Click="ApplyButton_Click"  Margin="10 0" Padding="10 0"></Button>
-                <Button Content="Cancel" Click="CancelButton_Click"  Padding="10 0"></Button>
+                <Button Content="Apply" Click="ApplyButton_Click"  Margin="10 0" Padding="10 0" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
+                <Button Content="Cancel" Click="CancelButton_Click"  Padding="10 0" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
             </StackPanel>
         </DockPanel>
     </Grid>

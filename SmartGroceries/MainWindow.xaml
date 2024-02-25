@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:SmartGroceries.Views"
         xmlns:vms="clr-namespace:SmartGroceries.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinWidth="600" MinHeight="450">
+        Title="Smart Groceries" Height="450" Width="800" MinWidth="600" MinHeight="450">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -16,7 +16,7 @@
                 <MenuItem Header="_Exit" />
             </MenuItem>
         </Menu>
-        <Grid Background="#1f1f1f">
+        <Grid Background="{StaticResource BackgroundMain}">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type vms:ArticlesManageViewModel}">
                     <views:ArticlesManageView/>
@@ -54,23 +54,24 @@
 
             <Border Background="#10101B">
                 <StackPanel Grid.Column="0" Margin="10">
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Carts"
                     Command="{Binding GoToManageCartsCommand}"></Button>
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Tags"
                     Command="{Binding GoToManageTagsCommand}"></Button>
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 10" Height="35" 
                     Content="Articles"
                     Command="{Binding GoToManageArticlesCommand}"></Button>
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10 0 20" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 10 0 20" Height="35" 
                     Content="Shops"
                     Command="{Binding GoToManageShopsCommand}"></Button>
                     <Separator/>
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 20 0 10" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 20 0 10" Height="35" 
                     Content="Compare"
                     Command="{Binding GoToCompareCommand}"></Button>
-                    <Button Foreground="#F4F5F5" Background="#DF1720" FontWeight="Bold" Margin="0 10" Height="35" 
+                    <Button Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" FontWeight="Bold" Margin="0 10" Height="35" 
+                            
                     Content="Carts Infos"
                     Command="{Binding GoToCartsInformationCommand}"></Button>
                 </StackPanel>

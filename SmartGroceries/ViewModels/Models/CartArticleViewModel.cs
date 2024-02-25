@@ -42,9 +42,11 @@ namespace SmartGroceries.ViewModels
 
                 if (SelectedShopArticle != null)
                 {
-                    Price = _selectedShopArticle?.GetClosestArticleInfo(Date)?.Price ?? 0;
+                    var articleInfo = _selectedShopArticle?.GetClosestArticleInfo(Date);
+                    Price = articleInfo?.Price ?? 0;
                     Tag = _selectedShopArticle.Article.Tag;
                     Brand = _selectedShopArticle.Article.Brand;
+                    UnitQuantity = articleInfo?.UnitQuantity ?? 0;
 
                     _articleName = _selectedShopArticle.Article.Name;
                     OnPropertyChanged(nameof(ArticleName));

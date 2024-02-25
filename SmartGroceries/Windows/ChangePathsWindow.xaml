@@ -5,60 +5,61 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartGroceries.Windows"
         mc:Ignorable="d"
-        Title="Change Paths Window" Height="400" Width="500" ResizeMode="NoResize">
+        Title="Change Paths" Height="400" Width="500" ResizeMode="NoResize"
+        Background="{StaticResource BackgroundMain}">
     <DockPanel Margin="20">
-        <TextBlock DockPanel.Dock="Top" Text="Change Resource Paths" FontSize="30" FontWeight="DemiBold"></TextBlock>
+        <TextBlock DockPanel.Dock="Top" Text="Change Resource Paths" FontSize="30" FontWeight="DemiBold" Foreground="{StaticResource LightText}" ></TextBlock>
 
         <StackPanel DockPanel.Dock="Top" Margin="0 20 0 10" VerticalAlignment="Stretch">
-            <TextBlock Text="Tags Paths"></TextBlock>
+            <TextBlock Text="Tags Paths" Foreground="{StaticResource LightText}"></TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="TagsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
-                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="TagOpenDialog_Click"></Button>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="TagOpenDialog_Click" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
             </Grid>
         </StackPanel>
 
         <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
-            <TextBlock Text="Articles Paths"></TextBlock>
+            <TextBlock Text="Articles Paths" Foreground="{StaticResource LightText}"></TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="ArticlesPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
-                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="ArticleOpenDialog_Click"></Button>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="ArticleOpenDialog_Click" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
             </Grid>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
-            <TextBlock Text="Shops Paths"></TextBlock>
+            <TextBlock Text="Shops Paths" Foreground="{StaticResource LightText}"></TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="ShopsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
-                <Button Grid.Column="1" Content="Search" Margin="5,0,0,0" Padding="10 0" Height="18" VerticalAlignment="Top" Click="ShopOpenDialog_Click"></Button>
+                <Button Grid.Column="1" Content="Search" Margin="5,0,0,0" Padding="10 0" Height="18" VerticalAlignment="Top" Click="ShopOpenDialog_Click" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
             </Grid>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0 10" VerticalAlignment="Stretch">
-            <TextBlock Text="Shops Paths"></TextBlock>
+            <TextBlock Text="Shops Paths" Foreground="{StaticResource LightText}"></TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="199*"></ColumnDefinition>
+                    <ColumnDefinition Width="31*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="CartsPath_TextBox" Grid.Column="0" Margin="0 0 5 0"/>
-                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="CartOpenDialog_Click"></Button>
+                <Button Grid.Column="1" Content="Search" Margin="5 0 0 0" Padding="10 0" Click="CartOpenDialog_Click" Foreground="{StaticResource LightText}" Background="{StaticResource ButtonMain}" BorderThickness="0"></Button>
             </Grid>
         </StackPanel>
 
 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Content="Apply" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Apply_Click"></Button>
-            <Button Content="Cancel" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Cancel_Click"></Button>
+            <Button Content="Apply" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Apply_Click" Background="{StaticResource ButtonMain}" Foreground="{StaticResource LightText}" BorderThickness="0"></Button>
+            <Button Content="Cancel" Margin="10 0" Padding="10 0" MaxWidth="75" Click="Cancel_Click" Background="{StaticResource ButtonMain}" Foreground="{StaticResource LightText}" BorderThickness="0"></Button>
         </StackPanel>
     </DockPanel>
 </Window>

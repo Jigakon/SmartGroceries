@@ -74,7 +74,7 @@ namespace SmartGroceries.ViewModels
             CartName = cartViewModel.Name;
             Date = cartViewModel.Date;
             foreach (var cartArticle in cartViewModel.CartArticles)
-                cartArticleViewModels.Add(new CartArticleViewModel(new CartArticle(cartViewModel.MakeCart(), cartArticle.MakeArticle(), cartArticle.Quantity, cartArticle.Price), this));
+                cartArticleViewModels.Add(new CartArticleViewModel(new CartArticle(cartViewModel.MakeCart(), cartArticle.MakeArticle(), cartArticle.Quantity, cartArticle.Price, cartArticle.UnitQuantity), this));
 
             _usableTags = new Dictionary<Guid, Tag>();
             foreach (var tag in GlobalDatabase.Instance.Tags)
@@ -107,14 +107,12 @@ namespace SmartGroceries.ViewModels
         {
             Cart cart = new Cart(CartId, CartName, Date, Shop);
             foreach (var CAVM in cartArticleViewModels)
-                cart.AddCartArticle(new CartArticle(cart, CAVM.MakeArticle(), CAVM.Quantity, CAVM.Price));
+                cart.AddCartArticle(new CartArticle(cart, CAVM.MakeArticle(), CAVM.Quantity, CAVM.Price, CAVM.UnitQuantity));
             return cart;
         }
 
         public void Save()
         {
-            
-
             Cart cart = MakeCart();
 
             GlobalDatabase.SaveCart(cart);

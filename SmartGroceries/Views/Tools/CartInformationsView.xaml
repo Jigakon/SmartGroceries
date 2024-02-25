@@ -61,9 +61,9 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
-            <TextBlock DockPanel.Dock="Top" Text="Cart Repartition" FontSize="30" FontWeight="Bold"></TextBlock>
+            <TextBlock DockPanel.Dock="Top" Text="Cart Repartition" FontSize="30" FontWeight="Bold" Foreground="{StaticResource LightText}"></TextBlock>
             <StackPanel DockPanel.Dock="Top" Margin="0 0 0 10">
-                <TextBlock Text="Cart"></TextBlock>
+                <TextBlock Text="Cart" Foreground="{StaticResource LightText}"></TextBlock>
                 <ComboBox x:Name="CartSelector" 
                           ItemsSource="{Binding Source={x:Static models:GlobalDatabase.Instance},
                             Path=Carts,
@@ -94,7 +94,10 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </DockPanel>
-        <lvc:PieChart Grid.Column="1" Series="{Binding Prices}" LegendLocation="Bottom" FontSize="16">
+        <lvc:PieChart x:Name="MyPieChart" Foreground="{StaticResource LightText}" Grid.Column="1" Series="{Binding Prices}" LegendLocation="Bottom" FontSize="16">
+            <lvc:PieChart.DataTooltip>
+                <lvc:DefaultTooltip BulletSize="20" Background="#9F1F1F1F"/>
+            </lvc:PieChart.DataTooltip>
         </lvc:PieChart>
     </Grid>
 </UserControl>

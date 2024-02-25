@@ -131,7 +131,7 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                                       VerticalAlignment="Center"
                                       SelectedValue="{Binding SelectedShopArticle}"
                                       DisplayMemberPath="Article.Name"
-                                      Text="{Binding ArticleName, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                      Text="{Binding ArticleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="true"
                                       
                                       FontSize="16"
@@ -145,7 +145,7 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                         <TextBox x:Name="ArticleBrand" Margin="5 0" FontWeight="DemiBold" FontSize="16" VerticalAlignment="Center" BorderThickness="0" Background="{StaticResource AccentColor}" Text="{Binding Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Border>
                     <!-- Tag -->
-                    <Border Grid.Column="2" Background="{Binding TagColor}" CornerRadius="5" Margin="2.5 0" IsEnabled="{Binding IsNotNew}">
+                    <Border Grid.Column="2" Background="{Binding TagColor}" CornerRadius="5" Margin="2.5 0">
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
@@ -213,9 +213,9 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
     <Grid>
         <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Border Margin="10 0"  Background="Red" Height="30" Width="30" CornerRadius="15">
+                <Border Margin="10 0" Background="{StaticResource ButtonMain}" Height="30" Width="30" CornerRadius="15">
                     <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageCartsCommand}">
-                        <TextBlock Padding="0 0 0 5" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock Padding="0 0 0 5" Foreground="{StaticResource LightText}" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     </Button>
                 </Border>
                 <!-- Title -->
@@ -225,13 +225,13 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                            Width="auto"
                            Height="auto"
                            Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run>Cart : </Run>
-                    <Run Text="{Binding Path=CartName, Mode=OneWay}" FontWeight="Bold" />
+                    <Run Foreground="{StaticResource LightText}" Text="Cart : "/>
+                    <Run Foreground="{StaticResource LightText}" Text="{Binding Path=CartName, Mode=OneWay}" FontWeight="Bold" />
                 </TextBlock>
 
             </StackPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10 20 10 10">
-                <TextBlock Text="Compact mode" Margin="5 0"></TextBlock>
+                <TextBlock Text="Compact mode" Margin="5 0" Foreground="{StaticResource LightText}"></TextBlock>
                 <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" Margin="5 0"/>
             </StackPanel>
             <DockPanel DockPanel.Dock="Top" Margin="10">
@@ -266,8 +266,8 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                         Margin="0 0 10 0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"  
-                        Background="#FFD21414" 
-                        Foreground="#FFDCCDCD" 
+                        Background="{StaticResource ButtonMain}"
+                        Foreground="{StaticResource LightText}" 
                         BorderThickness="0,0,0,0" 
                         FontWeight="Bold"
                         Command="{Binding AddCartArticleCommand}"/>
@@ -277,8 +277,8 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                         Margin="10 0 0 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"    
-                        Background="#FFD21414" 
-                        Foreground="#FFDCCDCD" 
+                        Background="{StaticResource ButtonMain}"
+                        Foreground="{StaticResource LightText}" 
                         BorderThickness="0,0,0,0" 
                         FontWeight="Bold"
                         Command="{Binding SaveCartArticlesCommand}"/>

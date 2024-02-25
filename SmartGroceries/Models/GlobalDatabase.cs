@@ -47,7 +47,23 @@ namespace SmartGroceries.Models
             Instance._pathToTags = newPath;
             return true;
         }
+        /*
+        private static void ExistsCreate(ref string path)
+        {
+            if (!PathExists(path))
+            {
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string appDataFolder = System.IO.Path.Combine(localAppData, "SmartGroceries");
 
+                if (!Directory.Exists(appDataFolder))
+                {
+                    Directory.CreateDirectory(appDataFolder);
+                }
+
+                path = System.IO.Path.Combine(appDataFolder, "preferences.json");
+            }
+        }
+        */
         public static bool LoadTagsFromJson()
         {
             if (!PathExists(Instance._pathToTags)) return false;
@@ -431,7 +447,7 @@ namespace SmartGroceries.Models
                 TryAddTag(cartArticle.Article.Tag);
                 SaveArticle(cartArticle.Article);
                 cart.Shop.TryAddArticle(cartArticle.Article);
-                cart.Shop.AddArticleInfo(cartArticle.Article.Id, new ArticleInfo(cartArticle.Price, cart.Date));
+                cart.Shop.AddArticleInfo(cartArticle.Article.Id, new ArticleInfo(cartArticle.Price, cart.Date, cartArticle.UnitQuantity));
             }
             SaveShop(cart.Shop);
 

@@ -3,4 +3,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <SolidColorBrush x:Key="AccentColor">#f0f8ff</SolidColorBrush>
     <SolidColorBrush x:Key="ElementBackgroundColor">#8a2be2</SolidColorBrush>
+    <SolidColorBrush x:Key="LightText">#FFCDCDCD</SolidColorBrush>
+    <SolidColorBrush x:Key="ButtonMain">#DF1720</SolidColorBrush>
+    <SolidColorBrush x:Key="BackgroundMain">#1f1f1f</SolidColorBrush>
 </ResourceDictionary>
