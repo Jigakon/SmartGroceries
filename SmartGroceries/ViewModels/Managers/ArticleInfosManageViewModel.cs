@@ -59,6 +59,7 @@ namespace SmartGroceries.ViewModels
 
         public string ShopName => _shopArticleViewModel.Shop.Name;
         public string ArticleName => _shopArticleViewModel.Article.Name;
+        public string ArticleBrand => _shopArticleViewModel.Article.Brand;
 
         public ArticleInfosManageViewModel(ShopArticleViewModel shopArticleViewModel, Services.NavigationService ShopManageViewService)
         {
@@ -122,7 +123,7 @@ namespace SmartGroceries.ViewModels
             Shop searchedShop = GlobalDatabase.TryGetShop(_shopArticleViewModel.Shop.Id);
             if (searchedShop != null)
             {
-                ShopArticle searchedShopArticle = searchedShop.GetShopArticle(_shopArticleViewModel.Article.Id);
+                ShopArticle searchedShopArticle = _shopArticleViewModel.Shop.GetShopArticle(_shopArticleViewModel.Article.Id);
                 if (searchedShopArticle != null)
                 {
                     searchedShopArticle.ClearArticleInfos();

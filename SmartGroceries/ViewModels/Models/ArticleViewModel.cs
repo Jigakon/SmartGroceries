@@ -92,13 +92,14 @@ namespace SmartGroceries.ViewModels
         }
 
         public Article MakeArticle() => new Article(Id, Name, Brand, Tag.MakeTag());
+        public Article MakeArticle(Guid newID) => new Article(newID, Name, Brand, Tag.MakeTag());
 
         public void Save()
         {
-            Article article = GlobalDatabase.TryGetArticle(Id);
+            Article article = GlobalDatabase.TryGetArticle(Name, Brand);
             bool articleExists = article != null;
             if (!articleExists)
-                article = MakeArticle();
+                article = MakeArticle(Guid.NewGuid());
             else
             {
                 if (Name != article.Name && MessageBox.Show($"The Name of the article changed !\nModify {article.Name} by {Name} ?", "Name Changed !", MessageBoxButton.OKCancel) == MessageBoxResult.OK)

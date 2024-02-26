@@ -64,6 +64,8 @@
                     <Run Foreground="{StaticResource LightText}" Text="{Binding ShopName, Mode=OneTime}"></Run>
                     <Run Foreground="{StaticResource LightText}" Text=" : "></Run>
                     <Run Foreground="{StaticResource LightText}" Text="{Binding ArticleName, Mode=OneTime}"></Run>
+                    <Run Foreground="{StaticResource LightText}" Text=" | "></Run>
+                    <Run Foreground="{StaticResource LightText}" Text="{Binding ArticleBrand, Mode=OneTime}"></Run>
                 </TextBlock>
             </StackPanel>
 

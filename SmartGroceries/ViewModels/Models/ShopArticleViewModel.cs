@@ -83,7 +83,7 @@ namespace SmartGroceries.ViewModels
         public ICommand SetPieceCommand { get; }
         public ICommand DeleteFromShopManageCommand { get; }
 
-        public ArticleInfo lastShopArticle => ArticleInfos.Last();
+        public ArticleInfo lastShopArticle => (ArticleInfos != null && ArticleInfos.Count != 0) ? ArticleInfos.Last() : new ArticleInfo();
         public string lastArticlePriceString { get => ArticleInfos.Count != 0 ? lastShopArticle.Price.ToString() : "-1"; }
         public string lastArticlePriceByUnitString { get => ArticleInfos.Count != 0 ? (lastShopArticle.Price / (UnitQuantity == 0 ? 1 : UnitQuantity)).ToString("0.000") : "-1"; }
 
