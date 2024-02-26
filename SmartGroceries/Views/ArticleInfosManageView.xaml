@@ -9,6 +9,11 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="Control"
+                    Key="S"
+                    Command="{Binding SaveArticleInfosCommand}" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <DataTemplate x:Key="ArticleInfoTemplate">
             <Border Background="{StaticResource ElementBackgroundColor}" CornerRadius="5" MinWidth="50" Margin="0" VerticalAlignment="Top" Padding="2.5">
@@ -95,7 +100,8 @@
                     Foreground="{StaticResource LightText}" 
                     BorderThickness="0,0,0,0" 
                     FontWeight="Bold"
-                    Command="{Binding SaveArticleInfosCommand}"/>
+                    Command="{Binding SaveArticleInfosCommand}">
+                </Button>
             </StackPanel>
             <lvc:CartesianChart DockPanel.Dock="Bottom" x:Name="CartesianChart" Series="{Binding Prices}" MinHeight="300" VerticalAlignment="Stretch">
                 <lvc:CartesianChart.AxisX>

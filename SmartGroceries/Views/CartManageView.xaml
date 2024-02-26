@@ -8,6 +8,11 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+    <KeyBinding Modifiers="Control"
+                Key="S"
+                Command="{Binding SaveCartArticlesCommand}" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <DataTemplate x:Key="CartArticleTemplate">
             <Border Background="{StaticResource ElementBackgroundColor}" Height="90" Padding="2.5 5 0 5" CornerRadius="5">

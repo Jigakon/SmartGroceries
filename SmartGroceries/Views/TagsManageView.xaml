@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:SmartGroceries.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="Control"
+            Key="S"
+            Command="{Binding SaveTagsCommand}" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <DataTemplate x:Key="TagTemplate">
             <Border Background="{Binding Color}" Margin="5" Padding="5" BorderThickness="0" CornerRadius="10">
