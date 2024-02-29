@@ -444,10 +444,11 @@ namespace SmartGroceries.Models
         {
             foreach (var cartArticle in cart.CartArticles)
             {
-                TryAddTag(cartArticle.Article.Tag);
-                SaveArticle(cartArticle.Article);
-                cart.Shop.TryAddArticle(cartArticle.Article);
-                cart.Shop.AddArticleInfo(cartArticle.Article.Id, new ArticleInfo(cartArticle.Price, cart.Date, cartArticle.UnitQuantity));
+                Article article = cartArticle.Article;
+                TryAddTag(article.Tag);
+                SaveArticle(article);
+                //cart.Shop.TryAddArticle(article);
+                //cart.Shop.AddArticleInfo(article.Id, new ArticleInfo(cartArticle.Price, cart.Date, cartArticle.UnitQuantity));
             }
             SaveShop(cart.Shop);
 
@@ -508,31 +509,34 @@ namespace SmartGroceries.Models
                 return carts[0];
             return carts.FirstOrDefault(x => x.Name == cartName);
         }
-
-        internal static void ModifyOrAddCart(Cart cart)
-        {
-            if (!ModifyCart(cart))
-                TryAddCart(cart);
-        }
-
-        private static bool TryAddCart(Cart cart)
+        internal static bool TryAddCart(Cart cart)
         {
             if (!HasCart(cart.Id))
             {
-
-                //Instance._shops.Add(shop.Id, shop);
+                Instance._carts.Add(cart.Id, cart);
                 return true;
             }
             return false;
         }
 
-        private static bool HasCart(Guid id)
+        public static bool HasCart(Guid id)
         {
             return Instance._carts.ContainsKey(id);
         }
 
-        private static bool ModifyCart(Cart cart)
+        public static bool ModifyCart(Guid cartID, string CartName, Shop shop, DateTime date, List<CartArticle> articles = null)
         {
+            Cart searchedCart = TryGetCart(cartID);
+            if (searchedCart != null)
+            {
+                // TODO : add cart articles
+                if (articles != null)
+                    searchedCart.CartArticles = articles;
+                searchedCart.Name = CartName;
+                searchedCart.Shop = shop;
+                searchedCart.Date = date;
+                return true;
+            }
             return false;
         }
         #endregion

@@ -96,13 +96,13 @@ namespace SmartGroceries.ViewModels
 
             ArticleUnit = shopArticle.ArticleUnit;
 
-            UnitQuantity = shopArticle.UnitQuantity;
             IsUnitFixed = shopArticle.IsUnitFixed;
 
             ArticleInfos = new List<ArticleInfo>();
             foreach(var articleInfo in shopArticle.ArticleInfos) 
                 ArticleInfos.Add(articleInfo);
 
+            UnitQuantity = IsUnitFixed ? shopArticle.UnitQuantity : (ArticleInfos.Count != 0 ? ArticleInfos.Last().UnitQuantity : -1f);
             ViewModelContainer = viewModelContainer;
 
             GoToArticleInfoManageCommand = new Commands.NavigateCommand(new Services.NavigationService(_navigationStore, CreateArticleInfosManageViewModel));

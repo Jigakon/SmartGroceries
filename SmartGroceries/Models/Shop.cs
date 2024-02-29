@@ -49,14 +49,16 @@ namespace SmartGroceries.Models
                     ShopArticles.Add(article.Article.Id, article);
                 }
             }
-            else
-                MessageBox.Show("An article registered in shop is doesn't exists in Article Database");
         }
 
-        public void TryAddArticle(Article article, Unit unit = Unit.Weight, float unitQuantity = -1f, List<ArticleInfo> infos = null, bool isUnitFixed = false)
+        public bool TryAddArticle(Article article, Unit unit = Unit.Weight, float unitQuantity = -1f, List<ArticleInfo> infos = null, bool isUnitFixed = false)
         {
             if (GetShopArticle(article.Id) == null)
+            {
                 ShopArticles.Add(article.Id, new ShopArticle(this, article, infos, unit, unitQuantity, isUnitFixed));
+                return true;
+            }
+            return false;
         }
 
         public ShopArticle GetShopArticle(Guid articleID)

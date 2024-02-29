@@ -42,7 +42,6 @@ namespace SmartGroceries.Models
         {
             Shop shop = GlobalDatabase.TryGetShop(ShopID);
             Cart cart = new Cart(Id, Name, Date, shop);
-            List<CartArticle> articles = new List<CartArticle>();
             foreach(var cartArticle in ArticleIds)
             {
                 Article article = GlobalDatabase.TryGetArticle(cartArticle.ArticleID);

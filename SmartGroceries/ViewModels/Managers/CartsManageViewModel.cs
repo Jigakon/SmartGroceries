@@ -39,15 +39,10 @@ namespace SmartGroceries.ViewModels
         }
 
         private DateTime SortByDate(CartViewModel elem) => elem.Date;
-        private double SortByPrice(CartViewModel elem) => elem.totalPrice;
-        private string SortByShopName(CartViewModel elem) => elem?.ShopName ?? "Error";
-        private string SortByName(CartViewModel elem) => elem.Name;
 
         public void ResetCarts()
         {
             _cartViewModels.Clear();
-            Func<CartViewModel, DateTime> a;
-            a = SortByDate;
             foreach (var cart in GlobalDatabase.Instance.Carts)
             {
                 _cartViewModels.Add(new CartViewModel(cart, this, _navigationStore));
@@ -67,6 +62,7 @@ namespace SmartGroceries.ViewModels
         {
             foreach (var cartID in RemovedCarts)
                 GlobalDatabase.RemoveCart(cartID);
+
             foreach (var cartViewModel in _cartViewModels)
             {
                 Cart cart = GlobalDatabase.TryGetCart(cartViewModel.Id);
@@ -88,12 +84,13 @@ namespace SmartGroceries.ViewModels
                             cartViewModel.Date = cart.Date;
                     }
 
-                    if (cartViewModel.Shop == null)
+                    if (cartViewModel.Shop == null || GlobalDatabase.TryGetShop(cartViewModel.Shop.Id) == null)
                     {
                         if (MessageBoxResult.OK == MessageBox.Show("Shop doesn't Exists !", "", MessageBoxButton.OKCancel))
                         {
                             cart.Shop = new Shop(cartViewModel.ShopName);
                             new Windows.MakeShopWindow(cartViewModel).ShowDialog();
+                            cartViewModel.Save();
                         }
                     }
                     else

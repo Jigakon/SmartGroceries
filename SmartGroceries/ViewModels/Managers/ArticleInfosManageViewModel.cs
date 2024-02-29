@@ -57,6 +57,7 @@ namespace SmartGroceries.ViewModels
         public ICommand GoToManageShopCommand { get; }
         #endregion
 
+        public bool IsUnitFixed => _shopArticleViewModel.IsUnitFixed;
         public string ShopName => _shopArticleViewModel.Shop.Name;
         public string ArticleName => _shopArticleViewModel.Article.Name;
         public string ArticleBrand => _shopArticleViewModel.Article.Brand;
@@ -107,7 +108,7 @@ namespace SmartGroceries.ViewModels
 
         public void AddArticleInfo(ArticleInfoViewModel articleInfo)
         {
-            ArticleInfos.Add(articleInfo);
+            ArticleInfos.Add(new ArticleInfoViewModel(articleInfo));
             Sort();
         }
 

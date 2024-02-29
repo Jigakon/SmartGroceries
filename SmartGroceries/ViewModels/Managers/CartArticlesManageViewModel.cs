@@ -113,9 +113,15 @@ namespace SmartGroceries.ViewModels
 
         public void Save()
         {
-            Cart cart = MakeCart();
+            foreach (var CAVM in cartArticleViewModels)
+            {
+                Article article = CAVM.MakeArticle();
+                var articleInfo = new ArticleInfo(CAVM.Price, Date, CAVM.UnitQuantity);
+                if (!Shop.TryAddArticle(article, CAVM.ArticleUnit, CAVM.UnitQuantity, new List<ArticleInfo> { articleInfo }, CAVM.IsUnitFixed))
+                    Shop.AddArticleInfo(article.Id, articleInfo);
+            }
 
-            GlobalDatabase.SaveCart(cart);
+            GlobalDatabase.SaveCart(MakeCart());
         }
 
         public void Remove(ViewModelData viewModel)

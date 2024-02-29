@@ -29,17 +29,31 @@ namespace SmartGroceries.ViewModels
                 if (_shop != null)
                 {
                     ShopLocation = _shop.Location;
-                    OnPropertyChanged(nameof(ShopLocation));
                     ShopName = _shop.Name;
-                    OnPropertyChanged(nameof(ShopName));
                 }
             }
         }
 
         private string _shopName;
-        public string ShopName { get => _shopName; set { _shopName = value; OnPropertyChanged(nameof(ShopName)); } }
+        public string ShopName 
+        { 
+            get => _shopName; 
+            set 
+            { 
+                _shopName = value; 
+                OnPropertyChanged(nameof(ShopName)); 
+            } 
+        }
         private string _shopLocation;
-        public string ShopLocation { get => _shopLocation; set { _shopLocation = value; OnPropertyChanged(nameof(ShopLocation)); } }
+        public string ShopLocation 
+        { 
+            get => _shopLocation; 
+            set 
+            { 
+                _shopLocation = value; 
+                OnPropertyChanged(nameof(ShopLocation)); 
+            } 
+        }
         public ObservableCollection<ViewModels.CartArticleViewModel> CartArticles { get; set; }
 
         public double totalPrice = 0.0;
@@ -89,13 +103,15 @@ namespace SmartGroceries.ViewModels
         {
             Cart cart = GlobalDatabase.TryGetCart(Id);
             if (cart == null)
+            {
                 cart = MakeCart();
+                GlobalDatabase.TryAddCart(cart);
+            }
             else
             {
 
+                GlobalDatabase.ModifyCart(Id, Name, Shop, Date);
             }
-
-            GlobalDatabase.ModifyOrAddCart(cart);
         }
     }
 }

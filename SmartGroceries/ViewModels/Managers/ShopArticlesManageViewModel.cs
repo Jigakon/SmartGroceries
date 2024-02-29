@@ -125,7 +125,7 @@ namespace SmartGroceries.ViewModels
         }
         #endregion
 
-        #region Commands
+         #region Commands
         public ICommand GoToManageShopsCommand { get; }
         public ICommand AddShopArticleCommand { get; }
         public ICommand SaveArticlesCommand { get; }
