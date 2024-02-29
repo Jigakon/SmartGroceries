@@ -161,6 +161,7 @@ namespace SmartGroceries.ViewModels
                 _price = value;
                 OnPropertyChanged(nameof(Price));
                 OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged(nameof(PriceUnit));
                 (ViewModelContainer as CartArticlesManageViewModel)?.UpdateTotalPrice();
             }
         }
@@ -181,9 +182,28 @@ namespace SmartGroceries.ViewModels
         }
 
         private Unit _articleUnit;
-        public Unit ArticleUnit { get => _articleUnit; set { _articleUnit = value; OnPropertyChanged(nameof(ArticleUnit)); OnPropertyChanged(nameof(UnitText)); } }
+        public Unit ArticleUnit 
+        { 
+            get => _articleUnit; 
+            set 
+            { 
+                _articleUnit = value; 
+                OnPropertyChanged(nameof(ArticleUnit)); 
+                OnPropertyChanged(nameof(UnitText)); 
+                OnPropertyChanged(nameof(PriceUnitText));
+            } 
+        }
         private float _unitQuantity;
-        public float UnitQuantity { get => _unitQuantity; set { _unitQuantity = value; OnPropertyChanged(nameof(UnitQuantity)); } }
+        public float UnitQuantity 
+        { 
+            get => _unitQuantity; 
+            set 
+            { 
+                _unitQuantity = value; 
+                OnPropertyChanged(nameof(UnitQuantity));
+                OnPropertyChanged(nameof(PriceUnit)); 
+            } 
+        }
 
         private bool _isUnitFixed = false;
         public bool IsUnitFixed
@@ -197,6 +217,7 @@ namespace SmartGroceries.ViewModels
             }
         }
         public bool IsNotUnitFixed => !_isUnitFixed;
+        public float PriceUnit => Price / UnitQuantity;
 
         public string UnitText
         {
@@ -212,8 +233,16 @@ namespace SmartGroceries.ViewModels
             }
         }
 
+        public string PriceUnitText
+        {
+            get => "€/" + UnitText; 
+        }
+
         public ICommand DeleteFromManage { get; }
         public ICommand MakeTagCommand { get; }
+        public ICommand SetWeightCommand { get; }
+        public ICommand SetVolumeCommand { get; }
+        public ICommand SetPieceCommand { get; }
 
         public CartArticleViewModel(Models.CartArticle cartArticle, ViewModels.ViewModelBase viewModelContainer)
         {
@@ -253,6 +282,9 @@ namespace SmartGroceries.ViewModels
 
             DeleteFromManage = new RemoveCartArticleCommand(this);
             MakeTagCommand = new MakeTagCommand(this);
+            SetWeightCommand = new SetUnitCommand(this, Unit.Weight);
+            SetVolumeCommand = new SetUnitCommand(this, Unit.Volume);
+            SetPieceCommand = new SetUnitCommand(this, Unit.Piece);
         }
     }
 }

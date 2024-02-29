@@ -62,6 +62,7 @@ namespace SmartGroceries.Views
             if (shopArticle == null || viewModel == null) return;
             viewModel?.ChangePrices(v, shopArticle?.ArticleInfos);
             viewModel?.ChangeName(v, shopArticle?.NameAndBrand + $" | {shopArticle.Shop.Name}");
+            viewModel?.ChangeUnit(v, shopArticle?.ArticleUnit ?? Unit.Weight);
         }
         private void DeleteArticle(int v, string shopName = "Shop")
         {
@@ -71,6 +72,7 @@ namespace SmartGroceries.Views
             SelectorArticles[v].SelectedItem = null;
             viewModel?.ClearPrices(v);
             viewModel?.ChangeName(v, $"Article | Brand | {shopName}");
+            viewModel?.ChangeUnit(v, Unit.Weight);
         }
         private void DeleteShop(int v)
         {

@@ -191,13 +191,26 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                     </Border>
                     <!-- Price -->
                     <Border Grid.Column="4" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
-                            <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
-                                                    Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="DemiBold"
-                                                    Value="{Binding Price}">
-                            </xctk:DecimalUpDown>
-                            <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                                <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                                                        Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="DemiBold" IsEnabled="True"
+                                                        Value="{Binding Price}">
+                                </xctk:DecimalUpDown>
+                                <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                                <xctk:DecimalUpDown x:Name="ArticlePriceUnit" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
+                                    Background="Transparent" BorderThickness="0" FontSize="10" FontWeight="DemiBold" IsEnabled="False"
+                                    Value="{Binding PriceUnit, Mode=OneWay}">
+                                </xctk:DecimalUpDown>
+                                <TextBlock Text="{Binding PriceUnitText}" VerticalAlignment="Center" FontSize="10" FontWeight="DemiBold"/>
+                            </StackPanel>
+                        </Grid>
                     </Border>
                     <!-- Quantity -->
                     <Border Grid.Column="5" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">

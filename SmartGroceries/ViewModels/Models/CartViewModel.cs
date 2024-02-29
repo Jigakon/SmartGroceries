@@ -79,6 +79,7 @@ namespace SmartGroceries.ViewModels
             ViewModelContainer = viewModelContainer;
             GoToCartManageCommand = new Commands.NavigateCommand(new Services.NavigationService(navigationStore, CreateCartManageViewModel));
             DeleteFromManage = new Commands.RemoveCartCommand(this);
+            
         }
 
         public ViewModels.CartArticlesManageViewModel CreateCartManageViewModel()

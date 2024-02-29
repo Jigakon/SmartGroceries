@@ -21,8 +21,9 @@ namespace SmartGroceries.ViewModels
         public double MinDate { get => _minDate; set { _minDate = value; OnPropertyChanged(nameof(MinDate)); } }
         public double MaxDate { get => _maxDate; set { _maxDate = value; OnPropertyChanged(nameof(MaxDate)); } }
         private Queue<Color> colors = new Queue<Color> { };
-        public SeriesCollection _prices;                 
-        public SeriesCollection Prices                    
+        private List<Unit> units = new List<Unit> { Unit.Weight, Unit.Weight, Unit.Weight };
+        public SeriesCollection _prices;
+        public SeriesCollection Prices
         {
             get => _prices;
             set
@@ -75,12 +76,19 @@ namespace SmartGroceries.ViewModels
             MaxDate = dates[dates.Count - 1].Ticks / TimeSpan.FromHours(1).Ticks;
         }
 
+        internal void ChangeUnit(int v, Unit unit)
+        {
+            units[v] = unit;
+        }
+
+
+
         internal void ChangePrices(int v, List<ArticleInfo> articleInfos)
         {
             // set Prices To a chart
-            if (v > Prices.Count || articleInfos == null) 
+            if (v > Prices.Count || articleInfos == null)
                 return;
-            
+
             Prices[v].Values.Clear();
             Prices[v].Values.AddRange(articleInfos);
 
@@ -106,6 +114,36 @@ namespace SmartGroceries.ViewModels
         }
         #endregion
 
+        private bool _isPricedByUnit = false;
+        public bool IsPricedByUnit
+        {
+            get => _isPricedByUnit;
+            set
+            {
+                _isPricedByUnit = value;
+                if (value)
+                {
+                    Prices.Configuration = LiveCharts.Configurations.Mappers.Xy<ArticleInfo>()
+                                                    .X(dayModel => (double)dayModel.Date.Ticks / TimeSpan.FromHours(1).Ticks)
+                                                    .Y(dayModel => dayModel.Price / dayModel.UnitQuantity);
+                }
+                else
+                {
+                    Prices.Configuration = LiveCharts.Configurations.Mappers.Xy<ArticleInfo>()
+                                                    .X(dayModel => (double)dayModel.Date.Ticks / TimeSpan.FromHours(1).Ticks)
+                                                    .Y(dayModel => dayModel.Price);
+                }
+
+                // Update Prices
+                for (int i = 0; i < Prices.Count(); i++)
+                {
+                    var values = (Prices[i].Values as ChartValues<ArticleInfo>).ToList();
+                    var unit = value ? $" €/{Helpers.UnitToString(units[i])}" : " €";
+                    Prices[i].LabelPoint = point => point.Y.ToString("0.00") + unit;
+                    ChangePrices(i, values);
+                }
+            }
+        }
 
         public CompareShopArticleViewModel()
         {
@@ -127,7 +165,8 @@ namespace SmartGroceries.ViewModels
                 CreateLineSerie("deux"),
                 CreateLineSerie("trois")
             };
-            Prices.FirstOrDefault(x => (x as LineSeries).Name == "deux");
+
+
         }
     }
 }

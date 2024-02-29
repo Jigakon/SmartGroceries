@@ -19,9 +19,10 @@
             <Border Background="{StaticResource ElementBackgroundColor}" CornerRadius="5" MinWidth="50" Margin="0" VerticalAlignment="Top" Padding="2.5">
                 <Grid Margin="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" MaxHeight="30" Margin="2.5">
                         <DatePicker x:Name="_DatePicker" VerticalAlignment="Center" BorderThickness="0" Margin="2.5 0" FontSize="16" FontWeight="DemiBold"
@@ -41,6 +42,15 @@
                                         Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
                                         Value="{Binding UnitQuantity}"/>
                             <TextBlock Text="{Binding Path=DataContext.shopArticleViewModel.UnitText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"
+                                       VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="3" Background="{StaticResource AccentColor}" CornerRadius="5" MaxHeight="30" Margin="2.5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                            <xctk:DecimalUpDown x:Name="_PriceUnit" Minimum="0" ShowButtonSpinner="False"
+                                                Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
+                                                Value="{Binding PriceQuantity, Mode=OneWay}" IsEnabled="false"/>
+                            <TextBlock Text="{Binding Path=DataContext.shopArticleViewModel.PriceUnitText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"
                                        VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
                         </StackPanel>
                     </Border>

@@ -16,6 +16,10 @@
                 Text="Compare Articles"
                 FontSize="30"
                 FontWeight="Bold"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <TextBlock Text="Price By Unit" Foreground="{StaticResource LightText}"/>
+                <CheckBox IsChecked="{Binding IsPricedByUnit}"></CheckBox>
+            </StackPanel>
             <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>

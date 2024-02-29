@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SmartGroceries.ViewModels
@@ -27,11 +28,11 @@ namespace SmartGroceries.ViewModels
 
         public ObservableCollection<CartArticleViewModel> SearchedViewModels { get => cartArticleViewModels; }
         private List<Guid> RemovedCartArticles = new List<Guid>();
-        
+
         private Shop _shop;
-        public Shop Shop 
-        { 
-            get => _shop; 
+        public Shop Shop
+        {
+            get => _shop;
             set
             {
                 _shop = value;
@@ -59,7 +60,7 @@ namespace SmartGroceries.ViewModels
             }
         }
         public void UpdateTotalPrice() => OnPropertyChanged(nameof(TotalPrice));
- 
+
         #region Commands
         public ICommand GoToManageCartsCommand { get; }
         public ICommand AddCartArticleCommand { get; }
@@ -118,9 +119,15 @@ namespace SmartGroceries.ViewModels
                 Article article = CAVM.MakeArticle();
                 var articleInfo = new ArticleInfo(CAVM.Price, Date, CAVM.UnitQuantity);
                 if (!Shop.TryAddArticle(article, CAVM.ArticleUnit, CAVM.UnitQuantity, new List<ArticleInfo> { articleInfo }, CAVM.IsUnitFixed))
+                {
                     Shop.AddArticleInfo(article.Id, articleInfo);
+                    var shopArticle = Shop.GetShopArticle(article.Id);
+                    shopArticle.IsUnitFixed = CAVM.IsUnitFixed;
+                    shopArticle.ArticleUnit = CAVM.ArticleUnit;
+                    if (shopArticle.IsUnitFixed)
+                        shopArticle.ArticleUnit = CAVM.ArticleUnit;
+                }
             }
-
             GlobalDatabase.SaveCart(MakeCart());
         }
 

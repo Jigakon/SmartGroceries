@@ -12,22 +12,6 @@ using System.Windows.Media;
 
 namespace SmartGroceries.ViewModels
 {
-    public class SetUnitCommand : CommandBase
-    {
-        ShopArticleViewModel _shopArticleViewModel;
-        Unit _unitToSet;
-        public SetUnitCommand(ShopArticleViewModel shopArticleViewModel, Unit unit)
-        {
-            _shopArticleViewModel = shopArticleViewModel;
-            _unitToSet = unit;
-        }
-
-        public override void Execute(object parameter)
-        {
-            _shopArticleViewModel.ArticleUnit = _unitToSet;
-        }
-    }
-
     public class ShopArticleViewModel : ViewModelData
     {
         private readonly Stores.NavigationStore _navigationStore;
@@ -76,6 +60,8 @@ namespace SmartGroceries.ViewModels
                 }
             }
         }
+
+        public string PriceUnitText => $"€/{UnitText}";
 
         public ICommand GoToArticleInfoManageCommand { get; }
         public ICommand SetWeightCommand { get; }

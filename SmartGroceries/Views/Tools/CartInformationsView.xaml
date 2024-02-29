@@ -44,7 +44,7 @@
                     <Border Grid.Column="4" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                         <TextBlock x:Name="ArticleQuantity" Text="{Binding Quantity}" TextAlignment="Center" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center" Background="Transparent"></TextBlock>
                     </Border>
-                    <Border Grid.Column="5" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0">
+                    <Border Grid.Column="5" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
                             <TextBlock Text="{Binding TotalPrice}" FontSize="20" FontWeight="DemiBold"/>
                             <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>

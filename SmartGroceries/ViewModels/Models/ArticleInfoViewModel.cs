@@ -22,6 +22,7 @@ namespace SmartGroceries.ViewModels
         }
         public float _price;
         public float Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); } }
+        public float PriceQuantity { get => Price / UnitQuantity; }
         /// <summary>
         /// in what unit quantity the Article is selled : weight (kg), volume (l) or piece.
         /// Examples : Water 1l, Chicken 1.5kg... 

@@ -133,6 +133,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApplicationPreferences.cs" />
+    <Compile Include="Commands\SetUnitCommand.cs" />
     <Compile Include="Commands\Make\EditTagCommand.cs" />
     <Compile Include="Commands\Make\MakeArticleInfoCommand.cs" />
     <Compile Include="Commands\Make\MakeCartArticleCommand.cs" />
