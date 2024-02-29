@@ -141,6 +141,9 @@
                               MaxValue="{Binding MaxDate, Mode=TwoWay}">
                     </lvc:Axis>
                 </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.DataTooltip>
+                    <lvc:DefaultTooltip BulletSize="20" Background="#9F1F1F1F"/>
+                </lvc:CartesianChart.DataTooltip>
             </lvc:CartesianChart>
         </DockPanel>
     </Grid>

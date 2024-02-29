@@ -56,7 +56,8 @@ namespace SmartGroceries.ViewModels
 
         public void Save()
         {
-            GlobalDatabase.ModifyOrAddTag(MakeTag());
+            if (!string.IsNullOrEmpty(Name))
+                GlobalDatabase.ModifyOrAddTag(MakeTag());
         }
     }
 }

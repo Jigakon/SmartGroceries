@@ -15,9 +15,10 @@
     <UserControl.Resources>
         <DataTemplate x:Key="ArticleTemplateCompact">
             <Border x:Name="ArticleElement"
-                        HorizontalAlignment="Stretch"
-                        Width="auto"
-                        Background="{StaticResource ElementBackgroundColor}" Padding="2.5 5" CornerRadius="5">
+                    HorizontalAlignment="Stretch"
+                    Width="auto"
+                    ToolTip="{Binding Id}"
+                    Background="{StaticResource ElementBackgroundColor}" Padding="2.5 5" CornerRadius="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -28,6 +29,7 @@
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Set Tag" Command="{Binding MakeTagCommand}"/>
+                                <MenuItem Header="Remove Tag" Command="{Binding RemoveTagCommand}"/>
                             </ContextMenu>
                         </Border.ContextMenu>
                         <TextBlock Text="{Binding TagText}" 

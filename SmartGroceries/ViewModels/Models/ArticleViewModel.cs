@@ -14,7 +14,16 @@ namespace SmartGroceries.ViewModels
 {
     public class ArticleViewModel : ViewModelData
     {
-        public Guid Id { get; set; }
+        private Guid _id;
+        public Guid Id 
+        { 
+            get => _id; 
+            set
+            {
+                _id = value; 
+                OnPropertyChanged(nameof(Id));
+            }
+        }
 
         private string _name;
         public string Name { get => _name; set { _name = value; OnPropertyChanged(nameof(Name)); } }
@@ -41,6 +50,7 @@ namespace SmartGroceries.ViewModels
         #region Commands
         public ICommand DeleteFromArticleManageCommand { get; }
         public ICommand MakeTagCommand { get; }
+        public ICommand RemoveTagCommand { get; }
         #endregion
 
         public ArticleViewModel(Models.Article article, ViewModels.ViewModelBase viewModelContainer)
@@ -49,9 +59,11 @@ namespace SmartGroceries.ViewModels
             Name = article.Name;
             Brand = article.Brand;
             Tag = new TagViewModel(article.Tag);
+            Tag.ViewModelContainer = this;
             ViewModelContainer = viewModelContainer;
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
+            RemoveTagCommand = new Commands.RemoveTagCommand(Tag);
         }
 
         public ArticleViewModel(Guid id, string name = "New Article", string brand = "New Article", Tag tag = null)
@@ -74,21 +86,39 @@ namespace SmartGroceries.ViewModels
             Tag.ViewModelContainer = this;
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
+            RemoveTagCommand = new Commands.RemoveTagCommand(Tag);
         }
 
         public ArticleViewModel(string name = "New Article", string brand = "New Brand", Tag tag = null)
         {
             Id = Guid.NewGuid(); Name = name; Brand = brand;
             Tag = new TagViewModel(tag);
+            Tag.ViewModelContainer = this;
 
             DeleteFromArticleManageCommand = new Commands.RemoveArticleCommand(this);
             MakeTagCommand = new Commands.MakeTagCommand(this);
+            RemoveTagCommand = new Commands.RemoveTagCommand(Tag);
         }
 
         public void SetTag(TagViewModel tagViewModel)
         {
             Tag = tagViewModel;
+            Tag.ViewModelContainer = this;
             OnPropertyChanged(nameof(Tag));
+        }
+        public void RemoveTag()
+        {
+            Tag = new TagViewModel(Models.Tag.Empty);
+            Tag.ViewModelContainer = this;
+            OnPropertyChanged(nameof(Tag));
+        }
+
+        public override void Remove(ViewModelData viewModel)
+        {
+            switch(viewModel)
+            {
+                case TagViewModel TVM : RemoveTag(); break;
+            }
         }
 
         public Article MakeArticle() => new Article(Id, Name, Brand, Tag.MakeTag());
@@ -97,14 +127,17 @@ namespace SmartGroceries.ViewModels
         public void Save()
         {
             // article Exists by ID, then By Name and Brand, if it is still not registered create a new Article
-            Article article = GlobalDatabase.TryGetArticle(Id) ?? GlobalDatabase.TryGetArticle(Name, Brand) ?? MakeArticle(Guid.NewGuid());
+            Article article = GlobalDatabase.TryGetArticle(Id) ?? 
+                GlobalDatabase.TryGetArticle(Name, Brand) ?? 
+                MakeArticle(Guid.NewGuid());
             // article Exists by Name and Brand
-            if (article.Name != Name || article.Brand != Brand || article.Tag.Id != Tag.Id)
-                if (MessageBox.Show("Modify Article ?", "Article Modified", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            bool tagIsDifferent = (article?.Tag?.Id ?? Guid.Empty) != (Tag?.Id ?? Guid.Empty);
+            if (article.Name != Name || article.Brand != Brand || tagIsDifferent)
+                if (MessageBox.Show($"Modify : {article.Name} | {article.Brand} by :\nName : {Name}\nBrand : {Brand}\nTag : {Tag.Name}", "Article Modified !", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     article.Name = Name;
                     article.Brand = Brand;
-                    if (Tag != null && Tag.Id != (article.Tag?.Id ?? Guid.Empty))
+                    if (Tag != null && tagIsDifferent)
                         article.Tag = Tag.MakeTag();
                 }
                 else
@@ -113,7 +146,7 @@ namespace SmartGroceries.ViewModels
                     Brand = article.Brand;
                     Tag = new TagViewModel(article.Tag);
                 }
-
+            Id = article.Id;
             Tag.Save();
             GlobalDatabase.ModifyOrAddArticle(article);
         }
