@@ -8,6 +8,7 @@
         xmlns:models="clr-namespace:SmartGroceries.Models"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
+        Icon="../Assets/SmartGroceries_Logo.ico"
         Title="Make Shop Article" Height="300" Width="400"
         Background="{StaticResource BackgroundMain}">
     <Grid>

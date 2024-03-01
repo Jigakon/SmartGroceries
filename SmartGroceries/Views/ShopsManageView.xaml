@@ -106,9 +106,7 @@
             </Border>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid>
-        <DockPanel Background="Transparent" Margin="20"
-            Grid.Row="0">
+    <DockPanel Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock 
                 Foreground="{StaticResource LightText}"
@@ -119,9 +117,10 @@
                 Width="auto"
                 Height="auto"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Foreground="{StaticResource LightText}" Text="Compact Mode" Margin="0 0 10 0"></TextBlock>
-                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
+            <!-- Compact Mode -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6 10 10 0">
+                <TextBlock Foreground="{StaticResource LightText}" Text="Compact Mode" Margin="0 0 5 0" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" Margin="5 0 0 0" VerticalAlignment="Center"></CheckBox>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
@@ -129,27 +128,13 @@
                 VerticalAlignment="Bottom"
                 MinHeight="20"
                 MaxHeight="60">
-                <Button Content="Add Shop"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding MakeShopCommand}"/>
+                <Button Content="Add Shop" Margin="0 0 5 0"
+                        Style="{StaticResource BottomButton}"
+                        Command="{Binding MakeShopCommand}"/>
 
-                <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="{StaticResource ButtonMain}" 
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding SaveShopsCommand}"/>
+                <Button Content="Save" Margin="5 0 0 0"
+                        Style="{StaticResource BottomButton}"
+                        Command="{Binding SaveShopsCommand}"/>
             </StackPanel>
 
             <!-- Shops -->
@@ -178,5 +163,4 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </DockPanel>
-    </Grid>
 </UserControl>

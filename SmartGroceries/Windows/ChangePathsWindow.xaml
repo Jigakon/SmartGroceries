@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartGroceries.Windows"
         mc:Ignorable="d"
+        Icon="../Assets/SmartGroceries_Logo.ico"
         Title="Change Paths" Height="400" Width="500" ResizeMode="NoResize"
         Background="{StaticResource BackgroundMain}">
     <DockPanel Margin="20">

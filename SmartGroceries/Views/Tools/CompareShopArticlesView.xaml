@@ -8,18 +8,19 @@
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
+    <DockPanel Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock DockPanel.Dock="Top"
                        Foreground="{StaticResource LightText}"
                 Text="Compare Articles"
                 FontSize="30"
                 FontWeight="Bold"/>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Price By Unit" Foreground="{StaticResource LightText}"/>
-                <CheckBox IsChecked="{Binding IsPricedByUnit}"></CheckBox>
+            <!-- Price by unit -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Price By Unit" Foreground="{StaticResource LightText}" FontSize="16" VerticalAlignment="Center" Margin="0 0 5 0" FontWeight="Medium"/>
+                <CheckBox IsChecked="{Binding IsPricedByUnit}" VerticalAlignment="Center" Margin="5 0 0 0"></CheckBox>
             </StackPanel>
+            <!-- Selectors -->
             <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -41,8 +42,8 @@
                                   DisplayMemberPath="Name"
                                   SelectionChanged="Selector0Shop_SelectionChanged">
                             </ComboBox>
-                            <Button x:Name="DeleteShopBtn0" Grid.Column="1" Width="{Binding ElementName=DeleteShopBtn0, Path=ActualHeight}" Click="DeleteShopBtn0_Click" Content="X"></Button>
-                        </Grid>
+                        <Button x:Name="DeleteShopBtn0" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteShopBtn0_Click"/>
+                    </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
                         <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
@@ -59,10 +60,11 @@
                                   TextBoxBase.TextChanged="Selector0Article_TextChanged"
                                   IsTextSearchEnabled="False">
                             </ComboBox>
-                            <Button x:Name="DeleteArticleBtn0" Grid.Column="1" Width="{Binding ElementName=DeleteArticleBtn0, Path=ActualHeight}" Click="DeleteArticleBtn0_Click" Content="X" IsEnabled="False"></Button>
+                            <Button x:Name="DeleteArticleBtn0" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteArticleBtn0_Click" IsEnabled="False"/>
                         </Grid>
                     </StackPanel>
                 </StackPanel>
+                
                 <StackPanel x:Name="Selector1" Grid.Column="1" Margin="10 0">
                     <StackPanel Margin="0 0 0 10">
                         <TextBlock Text="Shop" Foreground="{StaticResource LightText}"></TextBlock>
@@ -78,8 +80,8 @@
                                       DisplayMemberPath="Name"
                                       SelectionChanged="Selector1Shop_SelectionChanged">
                             </ComboBox>
-                            <Button x:Name="DeleteShopBtn1" Grid.Column="1" Width="{Binding ElementName=DeleteShopBtn1, Path=ActualHeight}" Click="DeleteShopBtn1_Click" Content="X"></Button>
-                        </Grid>
+                        <Button x:Name="DeleteShopBtn1" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteShopBtn1_Click"/>
+                    </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
                         <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
@@ -96,10 +98,11 @@
                                 TextBoxBase.TextChanged="Selector1Article_TextChanged"
                                 IsTextSearchEnabled="False">
                             </ComboBox>
-                            <Button x:Name="DeleteArticleBtn1" Grid.Column="1" Width="{Binding ElementName=DeleteArticleBtn0, Path=ActualHeight}" Click="DeleteArticleBtn1_Click" Content="X" IsEnabled="False"></Button>
-                        </Grid>
+                        <Button x:Name="DeleteArticleBtn1" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteArticleBtn1_Click" IsEnabled="False"/>
+                    </Grid>
                     </StackPanel>
                 </StackPanel>
+                
                 <StackPanel x:Name="Selector2" Grid.Column="2" Margin="10 0">
                     <StackPanel Margin="0 0 0 10">
                         <TextBlock Text="Shop" Foreground="{StaticResource LightText}"></TextBlock>
@@ -115,8 +118,8 @@
                                 DisplayMemberPath="Name"
                                 SelectionChanged="Selector2Shop_SelectionChanged">
                             </ComboBox>
-                            <Button x:Name="DeleteShopBtn2" Grid.Column="1" Width="{Binding ElementName=DeleteShopBtn2, Path=ActualHeight}" Click="DeleteShopBtn2_Click" Content="X"></Button>
-                        </Grid>
+                        <Button x:Name="DeleteShopBtn2" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteShopBtn2_Click"/>
+                    </Grid>
                     </StackPanel>
                     <StackPanel Margin="0 0 0 10">
                         <TextBlock Text="Article" Foreground="{StaticResource LightText}"></TextBlock>
@@ -133,8 +136,8 @@
                                 TextBoxBase.TextChanged="Selector2Article_TextChanged"
                                 IsTextSearchEnabled="False">
                             </ComboBox>
-                            <Button x:Name="DeleteArticleBtn2" Grid.Column="1" Width="{Binding ElementName=DeleteArticleBtn2, Path=ActualHeight}" Click="DeleteArticleBtn2_Click" Content="X" IsEnabled="False"></Button>
-                        </Grid>
+                        <Button x:Name="DeleteArticleBtn2" Grid.Column="1" Style="{StaticResource SideButton}" Click="DeleteArticleBtn2_Click" IsEnabled="False"/>
+                    </Grid>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -150,5 +153,4 @@
                 </lvc:CartesianChart.DataTooltip>
             </lvc:CartesianChart>
         </DockPanel>
-    </Grid>
 </UserControl>

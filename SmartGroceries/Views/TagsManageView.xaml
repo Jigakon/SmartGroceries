@@ -36,27 +36,13 @@
                 VerticalAlignment="Bottom"
                 MinHeight="20"
                 MaxHeight="60">
-                <Button Content="Add Tag"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="{StaticResource ButtonMain}" 
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding MakeTagCommand}"/>
+                <Button Content="Add Tag" Margin="0 0 5 0"
+                        Style="{StaticResource BottomButton}"
+                        Command="{Binding MakeTagCommand}"/>
 
-                <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding SaveTagsCommand}"/>
+                <Button Content="Save" Margin="5 0 0 0"
+                        Style="{StaticResource BottomButton}"
+                        Command="{Binding SaveTagsCommand}"/>
             </StackPanel>
 
             <!-- List of Tags from ItemManager -->

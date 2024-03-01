@@ -22,13 +22,20 @@ namespace SmartGroceries.ViewModels
         public Shop Shop { get; set; }
         public List<ArticleInfo> ArticleInfos { get; set; }
         private Unit _articleUnit;
-        public Unit ArticleUnit { get => _articleUnit; set { _articleUnit = value; OnPropertyChanged(nameof(ArticleUnit)); OnPropertyChanged(nameof(UnitText)); } }
+        public Unit ArticleUnit 
+        { 
+            get => _articleUnit; 
+            set 
+            { 
+                _articleUnit = value; 
+                OnPropertyChanged(nameof(ArticleUnit)); 
+                OnPropertyChanged(nameof(UnitText)); 
+            } 
+        }
         private float _unitQuantity;
         public float UnitQuantity { get => IsUnitFixed ? lastShopArticle.UnitQuantity : _unitQuantity; 
             set 
             {
-                if (IsUnitFixed) return;
-
                 _unitQuantity = value; 
                 OnPropertyChanged(nameof(UnitQuantity)); 
                 OnPropertyChanged(nameof(lastArticlePriceByUnitString)); 
@@ -46,6 +53,18 @@ namespace SmartGroceries.ViewModels
                 OnPropertyChanged(nameof(UnitQuantity));
             }
         }
+
+        public bool IsNotUnitFixed
+        {
+            get => !IsUnitFixed;
+            set
+            {
+                _isUnitFixed = !value;
+                OnPropertyChanged(nameof(IsUnitFixed));
+                OnPropertyChanged(nameof(UnitQuantity));
+            }
+        }
+
 
         public string UnitText
         {

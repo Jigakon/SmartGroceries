@@ -108,8 +108,7 @@
         </DataTemplate>
     </UserControl.Resources>
     
-    <Grid>
-        <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
+    <DockPanel Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock DockPanel.Dock="Top"
                 Foreground="{StaticResource LightText}"
@@ -119,37 +118,27 @@
                 Width="auto"
                 Height="auto"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Compact Mode" Margin="0 0 10 0" Foreground="{StaticResource LightText}"></TextBlock>
-                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked"></CheckBox>
+            <!-- Compact Mode -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6 10 0 10">
+                <TextBlock Text="Compact Mode" Margin="0 0 10 0" Foreground="{StaticResource LightText}" FontSize="16" FontWeight="Medium"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" VerticalAlignment="Center"></CheckBox>
             </StackPanel>
+            
+            <!-- Bottom buttons -->
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
                 MaxHeight="60">
-                <Button Content="Add Cart"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
+                <!-- Add cart button -->
+                <Button Content="Add Cart" Margin="0 0 5 0"
+                    Style="{StaticResource BottomButton}"
                     Command="{Binding MakeCartCommand}"/>
-
-                <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
-                    Command="{Binding SaveCartsCommand}"/>
+                <!-- Save button (Ctrl + S) -->
+                <Button Content="Save" Margin="5 0 0 0"
+                        Style="{StaticResource BottomButton}"
+                        Command="{Binding SaveCartsCommand}"/>
             </StackPanel>
 
             <!-- Shops -->
@@ -160,7 +149,7 @@
                 Background="Transparent"
                 VirtualizingPanel.ScrollUnit="Pixel"                
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Margin="0 20" BorderThickness="0"
+                Margin="0 10" BorderThickness="0"
                 ItemsSource="{Binding SearchedViewModels}"
                 ItemTemplate="{StaticResource CartTemplate}">
 
@@ -178,5 +167,4 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </DockPanel>
-    </Grid>
 </UserControl>

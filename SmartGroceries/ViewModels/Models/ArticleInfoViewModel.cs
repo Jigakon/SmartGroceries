@@ -21,14 +21,32 @@ namespace SmartGroceries.ViewModels
             }
         }
         public float _price;
-        public float Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); } }
-        public float PriceQuantity { get => Price / UnitQuantity; }
+        public float Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); OnPropertyChanged(nameof(PriceQuantity)); } }
+        public float PriceQuantity 
+        { 
+            get => (UnitQuantity != 0f) ? Price / UnitQuantity : 0f;
+            set
+            {
+                Price = value * UnitQuantity;
+                OnPropertyChanged(nameof(Price)); 
+                OnPropertyChanged(nameof(PriceQuantity));
+            }
+        }
         /// <summary>
         /// in what unit quantity the Article is selled : weight (kg), volume (l) or piece.
         /// Examples : Water 1l, Chicken 1.5kg... 
         /// </summary>
         private float _unitQuantity;
-        public float UnitQuantity { get => _unitQuantity; set { _unitQuantity = value; OnPropertyChanged(nameof(UnitQuantity)); } }
+        public float UnitQuantity 
+        { 
+            get => _unitQuantity; 
+            set 
+            { 
+                _unitQuantity = value; 
+                OnPropertyChanged(nameof(UnitQuantity));
+                OnPropertyChanged(nameof(PriceQuantity));
+            } 
+        }
 
         public ICommand DeleteArticleInfoCommand { get; }
         public ArticleInfoViewModel(Models.ArticleInfo articleInfo, ViewModels.ViewModelBase _viewModelContainer) 

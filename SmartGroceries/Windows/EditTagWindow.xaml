@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SmartGroceries.Windows"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
+        Icon="../Assets/SmartGroceries_Logo.ico"
         Title="Edit Tag" Height="200" Width="200"
         Background="{StaticResource BackgroundMain}">
     <DockPanel>

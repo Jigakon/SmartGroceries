@@ -62,7 +62,7 @@
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
             <TextBlock DockPanel.Dock="Top" FontSize="30" FontWeight="Bold" Foreground="{StaticResource LightText}"><Run Text="Cart "/><Run Language="fr-fr" Text="D"/><Run Text="istribution"/></TextBlock>
-            <StackPanel DockPanel.Dock="Top" Margin="0 0 0 10">
+            <StackPanel DockPanel.Dock="Top" Margin="10 10 0 10">
                 <TextBlock Text="Cart" Foreground="{StaticResource LightText}"></TextBlock>
                 <ComboBox x:Name="CartSelector" 
                           ItemsSource="{Binding Source={x:Static models:GlobalDatabase.Instance},

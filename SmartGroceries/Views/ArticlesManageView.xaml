@@ -137,8 +137,7 @@
         </DataTemplate>
 
     </UserControl.Resources>
-    <Grid>
-        <DockPanel Background="Transparent" Margin="20">
+    <DockPanel Background="Transparent" Margin="20">
             <!-- Title -->
             <TextBlock 
                 Foreground="{StaticResource LightText}"
@@ -148,44 +147,32 @@
                 FontWeight="Bold"
                 Width="auto"
                 Height="auto"
-                HorizontalAlignment="Left" VerticalAlignment="Center"
-                Margin="0 0 0 10"/>
-
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Compact Mode" VerticalAlignment="Center" Margin="0 0 5 0" Foreground="{StaticResource LightText}"></TextBlock>
-                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Click" VerticalAlignment="Center"></CheckBox>
+                HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        
+            <!-- Compact Mode -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6 10 10 0">
+                <TextBlock Foreground="{StaticResource LightText}" Text="Compact Mode" Margin="0 0 5 0" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Click" Margin="5 0 0 0"  VerticalAlignment="Center"></CheckBox>
             </StackPanel>
+        
+            <!-- Bottom Buttons -->
             <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
                 MaxHeight="60">
-                <Button Content="Add Article"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="{StaticResource ButtonMain}" 
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
+                <Button Content="Add Article" Margin="0 0 5 0"
+                    Style="{StaticResource BottomButton}"
                     Command="{Binding MakeArticleCommand}"/>
 
-                <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
+                <Button Content="Save" Margin="5 0 0 0"
+                    Style="{StaticResource BottomButton}"
                     Command="{Binding SaveArticlesCommand}"/>
             </StackPanel>
 
             <!-- Search Bar -->
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 10 0 0">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="6 10 0 10">
                 <StackPanel Width="auto" Margin="0 0 5 0">
                     <TextBlock Text="Name" Foreground="{StaticResource LightText}"/>
                     <TextBox Text="{Binding SearchingName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" MinWidth="100"/>
@@ -226,5 +213,5 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </DockPanel>
-    </Grid>
+
 </UserControl>

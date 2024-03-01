@@ -40,7 +40,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
                             <xctk:DecimalUpDown x:Name="_UnitQuantity" Minimum="0" ShowButtonSpinner="False"
                                         Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
-                                        Value="{Binding UnitQuantity}"/>
+                                        Value="{Binding UnitQuantity}" IsEnabled="{Binding Path=DataContext.shopArticleViewModel.IsNotUnitFixed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"/>
                             <TextBlock Text="{Binding Path=DataContext.shopArticleViewModel.UnitText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"
                                        VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
                         </StackPanel>
@@ -49,7 +49,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
                             <xctk:DecimalUpDown x:Name="_PriceUnit" Minimum="0" ShowButtonSpinner="False"
                                                 Background="Transparent" BorderThickness="0" FontSize="20" FontWeight="DemiBold"
-                                                Value="{Binding PriceQuantity, Mode=OneWay}" IsEnabled="false"/>
+                                                Value="{Binding PriceQuantity, Mode=TwoWay}" IsEnabled="{Binding Path=DataContext.shopArticleViewModel.IsUnitFixed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"/>
                             <TextBlock Text="{Binding Path=DataContext.shopArticleViewModel.PriceUnitText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ArticleInfosManageView}}}"
                                        VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
                         </StackPanel>
@@ -58,68 +58,62 @@
             </Border>
         </DataTemplate>
     </UserControl.Resources>
-    
-    <Grid>
-        <DockPanel Background="Transparent" Margin="20"
-           Grid.Row="0">
-            <StackPanel DockPanel.Dock="Top"
+
+    <DockPanel Background="Transparent" Margin="20">
+        <!-- Title + Back button -->
+        <StackPanel DockPanel.Dock="Top"
                 Orientation="Horizontal">
-                <Border Background="{StaticResource ButtonMain}" Height="30" Width="30" CornerRadius="15">
-                    <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageShopCommand}">
-                        <TextBlock Padding="0 0 0 5" FontSize="30" FontWeight="Bold" Foreground="{StaticResource LightText}" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                    </Button>
-                </Border>
-                <!-- Title -->
-                <TextBlock DockPanel.Dock="Top"
+            <!-- Back button -->
+            <Button Style="{StaticResource BackButton}" Command="{Binding GoToManageShopCommand}"/>
+            <!-- Title -->
+            <TextBlock DockPanel.Dock="Top"
+                    Foreground="{StaticResource LightText}"
                     FontSize="30"
                     FontWeight="Bold"
                     Width="auto"
                     Height="auto"
-                    Margin="30,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run Foreground="{StaticResource LightText}" Text="{Binding ShopName, Mode=OneTime}"></Run>
-                    <Run Foreground="{StaticResource LightText}" Text=" : "></Run>
-                    <Run Foreground="{StaticResource LightText}" Text="{Binding ArticleName, Mode=OneTime}"></Run>
-                    <Run Foreground="{StaticResource LightText}" Text=" | "></Run>
-                    <Run Foreground="{StaticResource LightText}" Text="{Binding ArticleBrand, Mode=OneTime}"></Run>
-                </TextBlock>
-            </StackPanel>
+                    Margin="30,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run Text="{Binding ShopName, Mode=OneTime}"></Run>
+                    <Run Text=" : "></Run>
+                    <Run Text="{Binding ArticleName, Mode=OneTime}"></Run>
+                    <Run Text=" | "></Run>
+                    <Run Text="{Binding ArticleBrand, Mode=OneTime}"></Run>
+            </TextBlock>
+        </StackPanel>
 
-            <StackPanel DockPanel.Dock="Bottom"
+        <!-- Priced By Unit -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="25 10 10 10">
+            <TextBlock Text="Price by unit" Foreground="{StaticResource LightText}" FontSize="16" FontWeight="Medium" Margin="0 0 5 0"/>
+            <CheckBox IsChecked="{Binding IsPricedByUnit}" VerticalAlignment="Center" Margin="5 0 0 0"></CheckBox>
+        </StackPanel>
+        
+        <!-- Bottom buttons -->
+        <StackPanel DockPanel.Dock="Bottom"
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 MinHeight="20"
                 MaxHeight="60">
-                <Button Content="Add Article Info"
-                    Padding="5"
-                    Margin="0 0 10 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"  
-                    Background="{StaticResource ButtonMain}" 
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
+            <!-- Add Article info button -->
+            <Button Content="Add Article Info" Margin="0 0 5 0"
+                    Style="{StaticResource BottomButton}"
                     Command="{Binding MakeArticleInfoCommand}"/>
-
-                <Button Content="Save"
-                    Padding="5"
-                    Margin="10 0 0 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"    
-                    Background="{StaticResource ButtonMain}"
-                    Foreground="{StaticResource LightText}" 
-                    BorderThickness="0,0,0,0" 
-                    FontWeight="Bold"
+            <!-- Save button (Ctrl + S) -->
+            <Button Content="Save" Margin="5 0 0 0"
+                    Style="{StaticResource BottomButton}"
                     Command="{Binding SaveArticleInfosCommand}">
-                </Button>
-            </StackPanel>
-            <lvc:CartesianChart DockPanel.Dock="Bottom" x:Name="CartesianChart" Series="{Binding Prices}" MinHeight="300" VerticalAlignment="Stretch">
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis LabelFormatter="{Binding FormatterDate}"></lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-            </lvc:CartesianChart>
-            <!-- Articles -->
-            <ListView DockPanel.Dock="Top"
+            </Button>
+        </StackPanel>
+        
+        <!-- Chart -->
+        <lvc:CartesianChart DockPanel.Dock="Bottom" x:Name="CartesianChart" Series="{Binding Prices}" MinHeight="300" VerticalAlignment="Stretch">
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis LabelFormatter="{Binding FormatterDate}"></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+        </lvc:CartesianChart>
+        
+        <!-- Articles -->
+        <ListView DockPanel.Dock="Top"
                 Name="lbArticles"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -130,20 +124,19 @@
                 ItemsSource="{Binding SearchedViewModels}"
                 ItemTemplate="{StaticResource ArticleInfoTemplate}">
 
-                <ListView.Resources>
-                    <ContextMenu x:Key="ArticleContextMenu">
-                        <MenuItem Header="Delete" Command="{Binding DeleteArticleInfoCommand}" Background="WhiteSmoke" />
-                    </ContextMenu>
-                </ListView.Resources>
+            <ListView.Resources>
+                <ContextMenu x:Key="ArticleContextMenu">
+                    <MenuItem Header="Delete" Command="{Binding DeleteArticleInfoCommand}" Background="WhiteSmoke" />
+                </ContextMenu>
+            </ListView.Resources>
 
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="ContextMenu" Value="{StaticResource ArticleContextMenu}" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource ArticleContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
 
-        </DockPanel>
-    </Grid>
+    </DockPanel>
 </UserControl>

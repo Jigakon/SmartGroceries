@@ -65,7 +65,6 @@ namespace SmartGroceries.ViewModels
         public ArticleInfosManageViewModel(ShopArticleViewModel shopArticleViewModel, Services.NavigationService ShopManageViewService)
         {
             _shopArticleViewModel = shopArticleViewModel;
-
             ArticleInfos = new ObservableCollection<ArticleInfoViewModel>();
 
             MakeArticleInfoCommand = new Commands.MakeArticleInfoCommand(this);
@@ -84,6 +83,32 @@ namespace SmartGroceries.ViewModels
             {
                 CreateLineSerie(ArticleInfos.ToList()),
             };
+
+            IsPricedByUnit = !(shopArticleViewModel?.IsUnitFixed ?? true);
+        }
+
+        private bool _isPricedByUnit = false;
+        public bool IsPricedByUnit
+        {
+            get => _isPricedByUnit;
+            set
+            {
+                _isPricedByUnit = value;
+                if (value)
+                {
+                    Prices.Configuration = LiveCharts.Configurations.Mappers.Xy<ArticleInfoViewModel>()
+                                                    .X(dayModel => (double)dayModel.Date.Ticks / TimeSpan.FromHours(1).Ticks)
+                                                    .Y(dayModel => dayModel.Price / dayModel.UnitQuantity);
+                }
+                else
+                {
+                    Prices.Configuration = LiveCharts.Configurations.Mappers.Xy<ArticleInfoViewModel>()
+                                                    .X(dayModel => (double)dayModel.Date.Ticks / TimeSpan.FromHours(1).Ticks)
+                                                    .Y(dayModel => dayModel.Price);
+                }
+
+                ResetArticleInfos();
+            }
         }
 
         public void Sort()
@@ -108,7 +133,12 @@ namespace SmartGroceries.ViewModels
 
         public void AddArticleInfo(ArticleInfoViewModel articleInfo)
         {
-            ArticleInfos.Add(new ArticleInfoViewModel(articleInfo));
+            if (shopArticleViewModel.IsUnitFixed)
+                articleInfo.UnitQuantity = shopArticleViewModel.UnitQuantity;
+            else
+                articleInfo.UnitQuantity = shopArticleViewModel.lastShopArticle.UnitQuantity;
+            articleInfo.Price = shopArticleViewModel.lastShopArticle?.Price ?? 0f;
+            ArticleInfos.Add(articleInfo);
             Sort();
         }
 

@@ -145,6 +145,7 @@ namespace SmartGroceries.ViewModels
             get => _quantity;
             set
             {
+                if (!IsUnitFixed) return;
                 _quantity = value;
                 OnPropertyChanged(nameof(Quantity));
                 OnPropertyChanged(nameof(TotalPrice));
@@ -217,7 +218,7 @@ namespace SmartGroceries.ViewModels
             }
         }
         public bool IsNotUnitFixed => !_isUnitFixed;
-        public float PriceUnit => Price / UnitQuantity;
+        public float PriceUnit => (UnitQuantity != 0) ? Price / UnitQuantity : 0f;
 
         public string UnitText
         {
@@ -251,7 +252,10 @@ namespace SmartGroceries.ViewModels
             {
                 IsUnitFixed = shopArticle.IsUnitFixed;
                 if (IsUnitFixed)
-                    UnitQuantity = shopArticle.UnitQuantity;
+                {
+                    _unitQuantity = shopArticle.UnitQuantity;
+                    OnPropertyChanged(nameof(UnitQuantity));
+                }
                 ArticleUnit = shopArticle.ArticleUnit;
             }
             else
@@ -270,10 +274,10 @@ namespace SmartGroceries.ViewModels
                     _allArticles.Add(search);
                 }
             _selectedSource = Shop?.ShopArticles.Values.ToList();
-
             Brand = cartArticle.Article.Brand;
             ArticleName = cartArticle.Article.Name;
-            Quantity = cartArticle.Quantity;
+            _quantity = cartArticle.Quantity;
+            OnPropertyChanged(nameof(Quantity));
             Tag = cartArticle.Article.Tag;
 
             SelectedShopArticle = cartArticle.Cart.Shop?.GetShopArticle(cartArticle.Article.Id);

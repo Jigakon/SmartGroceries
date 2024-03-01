@@ -14,6 +14,7 @@
                 Command="{Binding SaveCartArticlesCommand}" />
     </UserControl.InputBindings>
     <UserControl.Resources>
+        <!-- Not Really used -->
         <DataTemplate x:Key="CartArticleTemplate">
             <Border Background="{StaticResource ElementBackgroundColor}" Height="90" Padding="2.5 5 0 5" CornerRadius="5">
                 <Grid Margin="2.5 0">
@@ -121,6 +122,7 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+                    
                     <!-- Name -->                   
                     <Border Grid.Column="0" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="0 0 2.5 0">
                         <Grid Margin="2.5 0">
@@ -145,10 +147,12 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                             <CheckBox x:Name="ChangeSelection" Grid.Column="1" IsChecked="{Binding ChangeSelection}" VerticalAlignment="Center" Margin="0 0 0 0"/>
                         </Grid>
                     </Border>
+                    
                     <!-- Brand -->
                     <Border Grid.Column="1" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                         <TextBox x:Name="ArticleBrand" Margin="5 0" FontWeight="DemiBold" FontSize="16" VerticalAlignment="Center" BorderThickness="0" Background="{StaticResource AccentColor}" Text="{Binding Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </Border>
+                    
                     <!-- Tag -->
                     <Border Grid.Column="2" Background="{Binding TagColor}" CornerRadius="5" Margin="2.5 0">
                         <Border.ContextMenu>
@@ -162,10 +166,11 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                                        FontWeight="SemiBold" 
                                        FontSize="16"/>
                     </Border>
+                    
                     <!-- unit (kg / l / piece) -->
                     <Border Grid.Column="3" Background="{StaticResource AccentColor}" Margin="2.5 0" CornerRadius="5" >
                         <DockPanel VerticalAlignment="Center" Margin="10 0">
-
+                            <!-- unit text -->
                             <TextBlock DockPanel.Dock="Right" x:Name="ArticleUnit" VerticalAlignment="Center"
                                            Background="Transparent"
                                            Text="{Binding UnitText}" 
@@ -180,15 +185,19 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                                     </ContextMenu>
                                 </TextBlock.ContextMenu>
                             </TextBlock>
+                            <!-- Is unit fixed checkbox -->
                             <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsUnitFixed}" VerticalAlignment="Center" FontSize="50" ToolTip="Is Unit Fixed">
                                 <CheckBox.LayoutTransform>
                                     <ScaleTransform ScaleX="2" ScaleY="2" />
                                 </CheckBox.LayoutTransform>
                             </CheckBox>
+                            <!-- Separator -->
                             <Rectangle Fill="{StaticResource ElementBackgroundColor}" Margin="10 5" DockPanel.Dock="Left" Width="5" Height="auto" RadiusX="2.5" RadiusY="2.5"></Rectangle>
+                            <!-- unit Quantity number-->
                             <xctk:DecimalUpDown DockPanel.Dock="Right" IsEnabled="{Binding Path=IsNotUnitFixed}" Value="{Binding UnitQuantity}" HorizontalAlignment="Stretch" ShowButtonSpinner="False" Minimum="0" Increment="0.1" BorderThickness="0" Background="Transparent" FontSize="20" FontWeight="DemiBold"/>
                         </DockPanel>
                     </Border>
+                    
                     <!-- Price -->
                     <Border Grid.Column="4" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                         <Grid>
@@ -196,6 +205,7 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                                 <RowDefinition Height="2*"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
+                            <!-- Actual Price -->
                             <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
                                 <xctk:DecimalUpDown x:Name="ArticlePrice" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
                                                         Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="DemiBold" IsEnabled="True"
@@ -203,6 +213,7 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                                 </xctk:DecimalUpDown>
                                 <TextBlock Text="€" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
                             </StackPanel>
+                            <!-- Price By Unit -->
                             <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
                                 <xctk:DecimalUpDown x:Name="ArticlePriceUnit" Minimum="0" AllowSpin="False" ShowButtonSpinner="False"
                                     Background="Transparent" BorderThickness="0" FontSize="10" FontWeight="DemiBold" IsEnabled="False"
@@ -212,11 +223,13 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                             </StackPanel>
                         </Grid>
                     </Border>
+                    
                     <!-- Quantity -->
                     <Border Grid.Column="5" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0">
                         <xctk:DecimalUpDown x:Name="ArticleQuantity" Value="{Binding Quantity}" TextAlignment="Center" FontSize="16" FontWeight="DemiBold" ShowButtonSpinner="False" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0"></xctk:DecimalUpDown>
                     </Border>
-                    <!-- Price / unit -->
+                    
+                    <!-- Price * Quantity -->
                     <Border Grid.Column="6" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
                             <TextBlock Text="{Binding TotalPrice}" FontSize="16" FontWeight="DemiBold"/>
@@ -227,34 +240,49 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
             </Border>
         </DataTemplate>
     </UserControl.Resources>
-
-    <Grid>
-        <DockPanel Grid.Row="0" Background="Transparent" Margin="20">
+    
+    <DockPanel Background="Transparent" Margin="20">
+            <!-- Title + Back button -->
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Border Margin="10 0" Background="{StaticResource ButtonMain}" Height="30" Width="30" CornerRadius="15">
-                    <Button Background="Transparent" BorderThickness="0" Command="{Binding GoToManageCartsCommand}">
-                        <TextBlock Padding="0 0 0 5" Foreground="{StaticResource LightText}" FontSize="30" FontWeight="Bold" Text="←" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                    </Button>
-                </Border>
+                <!-- Back button -->
+                <Button Style="{StaticResource BackButton}" Command="{Binding GoToManageCartsCommand}"/>
+
                 <!-- Title -->
                 <TextBlock DockPanel.Dock="Top"
                            FontSize="30"
                            FontWeight="Bold"
                            Width="auto"
                            Height="auto"
-                           Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                           Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Run Foreground="{StaticResource LightText}" Text="Cart : "/>
                     <Run Foreground="{StaticResource LightText}" Text="{Binding Path=CartName, Mode=OneWay}" FontWeight="Bold" />
                 </TextBlock>
 
             </StackPanel>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10 20 10 10">
-                <TextBlock Text="Compact mode" Margin="5 0" Foreground="{StaticResource LightText}"></TextBlock>
-                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" Margin="5 0"/>
+            
+            <!-- Compact Mode -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6 20 10 10">
+                <TextBlock Text="Compact mode" Margin="5 0" Foreground="{StaticResource LightText}" FontSize="16" FontWeight="Medium"></TextBlock>
+                <CheckBox x:Name="IsCompactDisplay" Click="IsCompactDisplay_Checked" Margin="5 0" VerticalAlignment="Center"/>
             </StackPanel>
+        
+            <!-- Cart Date + Shop + Total Price -->
             <DockPanel DockPanel.Dock="Top" Margin="10">
+                <!-- Date -->
                 <DatePicker DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left" Margin="0 0 0 0"
                             SelectedDate="{Binding Path=Date, Mode=TwoWay}" BorderThickness="0" VerticalAlignment="Center"></DatePicker>
+                <!-- Total Price -->
+                <!-- Total Price Number -->
+                <Border DockPanel.Dock="Right" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0" HorizontalAlignment="Right" MaxWidth="200">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
+                        <TextBlock Text="{Binding TotalPrice, Mode=OneWay}" FontSize="20" FontWeight="DemiBold"/>
+                        <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
+                    </StackPanel>
+                </Border>
+                <!-- Total Price Label -->
+                <TextBlock DockPanel.Dock="Right" Text="Total Price : " VerticalAlignment="Center" Foreground="{StaticResource LightText}" FontSize="20" FontWeight="DemiBold" Margin="0 0 0 5"></TextBlock>
+                
+                <!-- Shop Selector -->
                 <ComboBox DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left" Margin="0 0 0 0"
                           x:Name="ShopCart" VerticalAlignment="Center" BorderThickness="0" Background="{StaticResource AccentColor}" BorderBrush="{StaticResource AccentColor}"
                           ItemsSource="{Binding Source={x:Static models:GlobalDatabase.Instance},
@@ -264,41 +292,22 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                           DisplayMemberPath="Name"
                           Text="{Binding Shop.Name}"
                           SelectionChanged="ShopCart_SelectionChanged"></ComboBox>
-                <Border DockPanel.Dock="Right" Background="{StaticResource AccentColor}" CornerRadius="5" Margin="2.5 0 0 0" HorizontalAlignment="Right" MaxWidth="200">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">
-                        <TextBlock Text="{Binding TotalPrice, Mode=OneWay}" FontSize="20" FontWeight="DemiBold"/>
-                        <TextBlock Text="€" VerticalAlignment="Center" FontSize="20" FontWeight="DemiBold"/>
-                    </StackPanel>
-                </Border>
             </DockPanel>
+        
+            <!-- Bottom buttons -->
             <StackPanel DockPanel.Dock="Bottom"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
                         MinHeight="20"
-                        MaxHeight="60"
-                        Margin="0 20">
-                
-                <Button Content="Add Article"
-                        Padding="5"
-                        Margin="0 0 10 0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"  
-                        Background="{StaticResource ButtonMain}"
-                        Foreground="{StaticResource LightText}" 
-                        BorderThickness="0,0,0,0" 
-                        FontWeight="Bold"
+                        MaxHeight="60">
+                <!-- Add cart Article button -->
+                <Button Content="Add Article" Margin="0 0 5 0"
+                        Style="{StaticResource BottomButton}"
                         Command="{Binding AddCartArticleCommand}"/>
-
-                <Button Content="Save"
-                        Padding="5"
-                        Margin="10 0 0 0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"    
-                        Background="{StaticResource ButtonMain}"
-                        Foreground="{StaticResource LightText}" 
-                        BorderThickness="0,0,0,0" 
-                        FontWeight="Bold"
+                <!-- Save button (Ctrl + S) -->
+                <Button Content="Save" Margin="5 0 0 0"
+                        Style="{StaticResource BottomButton}"
                         Command="{Binding SaveCartArticlesCommand}"/>
             </StackPanel>
 
@@ -327,7 +336,5 @@ FontWeight="DemiBold" Background="{StaticResource AccentColor}" Text="{Binding B
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
-
         </DockPanel>
-    </Grid>
 </UserControl>

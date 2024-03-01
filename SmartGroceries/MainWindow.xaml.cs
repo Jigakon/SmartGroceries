@@ -43,5 +43,10 @@ namespace SmartGroceries
 
             pref.Save();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
